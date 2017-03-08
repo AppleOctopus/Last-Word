@@ -32,7 +32,7 @@ The following **bonus** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-https://github.com/AppleOctopus/Last-Word/blob/master/LW.mov
+https://github.com/AppleOctopus/Last-Word/blob/master/LW_1_.mp4
 
 GIF created with [Jeff]
 
