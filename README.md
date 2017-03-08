@@ -32,7 +32,7 @@ The following **bonus** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+https://github.com/AppleOctopus/Last-Word/blob/master/LW.mov
 
 GIF created with [Jeff]
 
