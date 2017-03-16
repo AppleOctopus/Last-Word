@@ -6,12 +6,12 @@ description:
 
 The following **required** functionality is completed:
 
-*T [ ] User can sign in with Facebook and Google+ 
-*A [] Implement different scenes with dynamic background
-*A [] User can use the front camera try to record the video
-*T [] App has a centralize backend service to keep user's profile and videos
+* T [ ] User can sign in with Facebook and Google+ 
+* A [] Implement different scenes with dynamic background
+* A [] User can use the front camera try to record the video
+* T [] App has a centralize backend service to keep user's profile and videos
 * [] User can play their video on Dailymotion if there is no file on device
-*A [] App can upload the user videos to Dailymotion as long as internet availible 
+* A [] App can upload the user videos to Dailymotion as long as internet availible 
 * [] User can choose different perspective to show their appreciations 
 * [] User can set the password to protect their videos.
 * [] User can view the videos they have recorded.
