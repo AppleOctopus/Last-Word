@@ -6,27 +6,29 @@ description:
 
 The following **required** functionality is completed:
 
-* [] User can do ...
-* [] ...
-* [] ...
-  * [] Here is more detail
-  * [] ...
+* [] User can sign in with Facebook and Google+
+* [] Implement different scenes with dynamic background
+* [] User can use the front camera try to record the video
+* [] App has a centralize backend service to keep user's profile and videos
+* [] User can play their video on Dailymotion if there is no file on device
+* [] App can upload the user videos to Dailymotion as long as internet availible 
+* [] User can choose different perspective to show their appreciations 
+* [] User can set the password to protect their videos.
+* [] User can view the videos they have recorded.
+   * [] 1. User can see the first frame of their video in the video list.
+   * [] 2. User can see the overlay and upload icon on 1.
+* [] User can share the video to others by system default share action.
+* [] User can copy the link in the video playing page.
 
 The following **optional** features are implemented:
 
-* [] User can do ...
-* [] ...
-* [] ...
-  * [] Here is more detail
-  * [] ...
+* [] Change the VideoView to ExoPlayer 
+* [] User can view the videos length
+* [] App only upload videos on the wifi environment
 
 The following **bonus** features are implemented:
 
-* [] User can do ...
-* [] ...
-* [] ...
-  * [] Here is more detail
-  * [] ...
+
 
 ## Video Walkthrough
 
