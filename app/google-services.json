@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "648623171179",
+    "firebase_url": "https://lastword-6763b.firebaseio.com",
+    "project_id": "lastword-6763b",
+    "storage_bucket": "lastword-6763b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648623171179:android:cc383e33dcc88be7",
+        "android_client_info": {
+          "package_name": "appleoctopus.lastword"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648623171179-n9o53dspg40hdnkddpts3n6q9eiktgl2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "appleoctopus.lastword",
+            "certificate_hash": "b79d99a5534c36cd92e471b9b615f102a23fde96"
+          }
+        },
+        {
+          "client_id": "648623171179-b6jguvq88ment40svv3fsmaptlramle7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4whI2_IwCkE3S61m8pOtb3rFa4z-pGEE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648623171179-b6jguvq88ment40svv3fsmaptlramle7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
