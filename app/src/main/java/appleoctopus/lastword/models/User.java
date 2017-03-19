@@ -1,7 +1,5 @@
 package appleoctopus.lastword.models;
 
-import com.firebase.client.Firebase;
-
 /**
  * Created by lin1000 on 2017/3/19.
  */
@@ -62,8 +60,8 @@ public class User {
 
     public void saveUser() {
         //Add YOUR Firebase Reference URL instead of the following URL
-        Firebase myFirebaseRef = new Firebase("https://lastword-6763b.firebaseio.com/ ");
-        myFirebaseRef = myFirebaseRef.child("users").child(getId());
-        myFirebaseRef.setValue(this);
+//        Firebase myFirebaseRef = new Firebase("https://lastword-6763b.firebaseio.com/ ");
+//        myFirebaseRef = myFirebaseRef.child("users").child(getId());
+//        myFirebaseRef.setValue(this);
     }
 }
