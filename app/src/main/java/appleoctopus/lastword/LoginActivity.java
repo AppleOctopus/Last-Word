@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -43,15 +45,14 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //myFirebaseRef = FirebaseAuth.getInstance();
-
         //FaceBook
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(getApplicationContext(), "Preparing to saveFacebookLoginData" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Access Token:" + loginResult.getAccessToken(), Toast.LENGTH_LONG).show();
+                Log.d("DEBUG", "loginResult.getAccessToken()="+loginResult.getAccessToken() );
                 saveFacebookLoginData("facebook", loginResult.getAccessToken());
             }
 
@@ -73,12 +74,20 @@ public class LoginActivity extends AppCompatActivity {
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_login, menu);
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         //email = (EditText) findViewById(R.id.edit_text_email_id);
         //password = (EditText) findViewById(R.id.edit_text_password);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar_login);
+        Log.d("DEBUG","onStart Executed - prepare to checkUserLogin");
         checkUserLogin();
+
     }
 
 
@@ -90,20 +99,20 @@ public class LoginActivity extends AppCompatActivity {
     }
     //
 
-
-
     protected void setUpUser() {
         user = new User();
     }
 
     //FaceBook
     public void onFacebookLogInClicked( View view ){
+        Log.d("DEBUG","onFacebookLogInClicked Start");
         LoginManager
                 .getInstance()
                 .logInWithReadPermissions(
                         this,
                         Arrays.asList("public_profile", "user_friends", "email")
                 );
+        Log.d("DEBUG","onFacebookLogInClicked Finished");
     }
     //
 
@@ -133,6 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                     new Firebase.AuthResultHandler() {
                         @Override
                         public void onAuthenticated(AuthData authData) {
+                            Log.d("DEBUG", "onAuthenticated authData="+ authData.toString());
                             String uid=authData.getUid();
                             String name=authData.getProviderData().get("displayName").toString();
                             String email=authData.getProviderData().get("email").toString();
@@ -151,6 +161,8 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onAuthenticationError(FirebaseError firebaseError) {
                             Toast.makeText(getApplicationContext(), "" + firebaseError.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.d("DEBUG", "firebaseError.getMessage()="+ firebaseError.getMessage());
+
                         }
                     });
         }
@@ -159,6 +171,4 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     //
-
-
 }
