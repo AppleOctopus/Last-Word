@@ -47,7 +47,7 @@
                 android:layout_height="20dp" />
 
 
-            <Button
+            <!--<Button
                 android:id="@+id/button_facebook_sign_in"
                 style="?android:textAppearanceSmall"
                 android:layout_width="fill_parent"
@@ -59,7 +59,15 @@
                 android:layout_marginRight="10dp"
                 android:text="Login with Facebook"
                 android:textStyle="bold"
-                android:textColor="@color/colorText"/>
+                android:textColor="@color/colorText"/>-->
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/button_facebook_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp" />
 
 
         </LinearLayout>
