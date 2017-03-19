@@ -26,6 +26,7 @@ The following **optional** features are implemented:
 * [] User can view the videos length
 * [] App only upload videos on the wifi environment
 * [] Use Firebase as the backend
+
 The following **bonus** features are implemented:
 
 
