@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getProviderId());
 
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
                     intent.putExtra("uid",user.getUid());
                     intent.putExtra("displayName",user.getDisplayName());
                     intent.putExtra("email",user.getEmail());
