@@ -6,7 +6,7 @@ description:
 
 The following **required** functionality is completed:
 
-* T [ ] User can sign in with Facebook and Google+ 
+* T [*] User can sign in with ***Facebook*** and Google+ 
 * A [*] Implement different scenes with dynamic background
 * A [*] User can use the front camera try to record the video
 * T [] App has a centralize backend service to keep user's profile and videos
