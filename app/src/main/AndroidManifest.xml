@@ -4,9 +4,9 @@
     package="appleoctopus.lastword">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_VIDEO"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.RECORD_VIDEO"/>-->
+    <!--<uses-permission android:name="android.permission.RECORD_AUDIO"/>-->
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -46,7 +46,7 @@
             android:value="0e20e7e8ebb5b6905634e2aa45ed0496dad3574f" />
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".BeforeSelfRecordActivity" />
+        <activity android:name=".Introduction.BeforeSelfRecordActivity" />
         <activity android:name=".BaseDynamicViewActivity" />
         <activity android:name=".CatogoryActivity" />
         <activity android:name=".AfterSelfRecordActivity" />

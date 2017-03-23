@@ -1,7 +1,9 @@
-package appleoctopus.lastword;
+package appleoctopus.lastword.Introduction;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
+import appleoctopus.lastword.BaseDynamicViewActivity;
 
 public class IntroActivity extends BaseDynamicViewActivity {
 

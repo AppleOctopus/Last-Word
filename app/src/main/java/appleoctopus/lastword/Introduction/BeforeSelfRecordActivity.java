@@ -1,4 +1,4 @@
-package appleoctopus.lastword;
+package appleoctopus.lastword.Introduction;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,19 +9,29 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.VideoView;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import appleoctopus.lastword.AfterSelfRecordActivity;
+import appleoctopus.lastword.BaseDynamicViewActivity;
+import appleoctopus.lastword.R;
+
 public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
     private static final String TAG = BeforeSelfRecordActivity.class.getSimpleName();
     private static final int REQUEST_VIDEO_CAPTURE = 1;
 
+    private VideoView mVideoView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mVideoView = (VideoView) findViewById(R.id.videoView);
+        dispatchTakeVideoIntent();
         setButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,13 +44,13 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Uri videoUri = intent.getData();
-
             Log.d(TAG, videoUri.toString());
 
-            saveTheVideo(intent);
+            mVideoView.setVideoURI(videoUri);
+            mVideoView.start();
 
-            File videofiles = new File(videoUri.toString());
-            boolean b = videofiles.delete();
+            saveTheVideoToSpecificPath(intent);
+            deleteTheOriginalFile(videoUri);
 
             Intent i = new Intent();
             i.setClass(this, AfterSelfRecordActivity.class);
@@ -48,7 +58,12 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
          }
     }
 
-    private void saveTheVideo(Intent data) {
+    private void deleteTheOriginalFile(Uri videoUri) {
+        File videofiles = new File(videoUri.toString());
+        boolean b = videofiles.delete();
+    }
+
+    private void saveTheVideoToSpecificPath(Intent data) {
         try {
 
             // 1. rename doesn't work!
@@ -61,14 +76,16 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
 
             AssetFileDescriptor videoAsset = getContentResolver().openAssetFileDescriptor(data.getData(), "r");
             FileInputStream fis = videoAsset.createInputStream();
+
+            FileInputStream inputStream  = new FileInputStream(String.valueOf(data.getData()));
             FileOutputStream fos = new FileOutputStream(getExternalStorageFile());
 
             byte[] buf = new byte[1024];
             int len;
-            while ((len = fis.read(buf)) > 0) {
+            while ((len = inputStream.read(buf)) > 0) {
                 fos.write(buf, 0, len);
             }
-            fis.close();
+            inputStream.close();
             fos.close();
 
         } catch (Exception e) {
@@ -79,8 +96,8 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
 
     private void dispatchTakeVideoIntent() {
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        Uri videoUri = Uri.fromFile(getInternalStorageFile());
-        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
+        //Uri videoUri = Uri.fromFile(getInternalStorageFile());
+        //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
 
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);

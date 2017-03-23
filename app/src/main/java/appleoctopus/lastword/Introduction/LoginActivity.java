@@ -1,4 +1,4 @@
-package appleoctopus.lastword;
+package appleoctopus.lastword.Introduction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import appleoctopus.lastword.R;
 
 /**
  * Created by lin1000 on 2017/3/19.
