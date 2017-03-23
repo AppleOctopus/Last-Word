@@ -1,6 +1,7 @@
 package appleoctopus.lastword;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(NormalTextViewHolder holder, int position) {
         holder.mTextView.setText(mTitles[position]);
+        holder.mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setClass(mContext, ListActivity.class);
+                mContext.startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -47,12 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mTextView = (TextView) view.findViewById(R.id.textView);
             mImageView = (ImageView) view.findViewById(R.id.image_view);
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("NormalTextViewHolder", "onClick--> position = " + getPosition());
-                }
-            });
+
         }
     }
 }

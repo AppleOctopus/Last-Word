@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import appleoctopus.lastword.AfterSelfRecordActivity;
 import appleoctopus.lastword.BaseDynamicViewActivity;
 import appleoctopus.lastword.R;
+import appleoctopus.lastword.util.SharePreference;
 
 public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
     private static final String TAG = BeforeSelfRecordActivity.class.getSimpleName();
@@ -45,6 +46,8 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Uri videoUri = intent.getData();
             Log.d(TAG, videoUri.toString());
+            Log.d(TAG, videoUri.getPath());
+            SharePreference.saveUri(this, videoUri.getPath());
 
             mVideoView.setVideoURI(videoUri);
             mVideoView.start();
