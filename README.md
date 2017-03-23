@@ -10,7 +10,7 @@ The following **required** functionality is completed:
    * T [] Request Permission of Friend List, Public Profile, Email
 * A [*] Implement different scenes with dynamic background
 * A [*] User can use the front camera try to record the video
-* T [] App has a centralize backend service to keep user's profile and videos
+* T [*] App has a centralize backend service to keep user's profile and videos
    * T [] User Email, Viedo URL , Password, Local or remote, Category
    * T [] API for insert video url, get list of video url by user mail.
    * T [] Video Object include url, category, user email, password, lenght, format (codec)
