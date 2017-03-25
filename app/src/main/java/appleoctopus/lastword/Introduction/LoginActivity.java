@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import appleoctopus.lastword.R;
+import appleoctopus.lastword.firebase.FirebaseDB;
+import appleoctopus.lastword.models.User;
 
 /**
  * Created by lin1000 on 2017/3/19.
@@ -33,9 +37,12 @@ import appleoctopus.lastword.R;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //firebase auth
     private static final String TAG = "facebooklogin";
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+
+
     //FaceBook
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -63,12 +70,23 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getDisplayName());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getProviderId());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
+
+                    // Write a message to the database
+                    User u = new User();
+                    u.setFbId(user.getUid());
+                    u.setDisplayName(user.getDisplayName());
+                    u.setFbEmail(user.getEmail());
+                    u.setFbPhotoUrl(user.getPhotoUrl().toString());
+                    //user.getProviderData();
+
+                    FirebaseDB.getInstance().saveNewUser(u);
 
                     Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
                     intent.putExtra("uid",user.getUid());
                     intent.putExtra("displayName",user.getDisplayName());
                     intent.putExtra("email",user.getEmail());
-                    startActivity(intent);
+                    //startActivity(intent);
 
                 } else {
                     // User is signed out
@@ -79,10 +97,9 @@ public class LoginActivity extends AppCompatActivity {
         };
         // ...
 
-
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions("email", "public_profile", "user_friends");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -106,10 +123,53 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithCredential", task.getException());
+                            Toast.makeText(LoginActivity.this, "Your account has been disabled. Sorry!",
+                                    Toast.LENGTH_LONG).show();
+                            FirebaseAuth.getInstance().signOut();
+                            LoginManager.getInstance().logOut();
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -130,30 +190,6 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
 
-    }
-
-    private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                    }
-                });
     }
 
 

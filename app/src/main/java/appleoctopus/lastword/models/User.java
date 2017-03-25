@@ -1,35 +1,45 @@
 package appleoctopus.lastword.models;
 
+import java.util.List;
+
 /**
  * Created by lin1000 on 2017/3/19.
  */
 
 public class User {
 
-    private String id;
-    private String name;
+
+    private String fbId;
+    private String fbEmail;
+    private String fbPhotoUrl;
+    private String googleId;
+    private String googleEmail;
+    private String displayName;
     private String phoneNumber;
-    private String email;
-    private String password;
+    private String password; //user
+    private Boolean isShowIntro; // ture by default and false after intro completed
+    private Boolean isImportFriend; //true by default and false after 1st time friend import
+    private List<Video> videos;
 
 
     public User() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public String getId() {
-        return id;
+    public String getFbId() {
+        return fbId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setFbId(String fbId) {
+        this.fbId = fbId;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
 
@@ -42,12 +52,60 @@ public class User {
     }
 
 
-    public String getEmail() {
-        return email;
+    public String getFbEmail() {
+        return fbEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setFbEmail(String fbEmail) {
+        this.fbEmail = fbEmail;
+    }
+
+    public String getFbPhotoUrl() {
+        return fbPhotoUrl;
+    }
+
+    public void setFbPhotoUrl(String fbPhotoUrl) {
+        this.fbPhotoUrl = fbPhotoUrl;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    public String getGoogleEmail() {
+        return googleEmail;
+    }
+
+    public void setGoogleEmail(String googleEmail) {
+        this.googleEmail = googleEmail;
+    }
+
+    public Boolean getShowIntro() {
+        return isShowIntro;
+    }
+
+    public void setShowIntro(Boolean showIntro) {
+        isShowIntro = showIntro;
+    }
+
+    public Boolean getImportFriend() {
+        return isImportFriend;
+    }
+
+    public void setImportFriend(Boolean importFriend) {
+        isImportFriend = importFriend;
+    }
+
+    public List<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
     }
 
     public String getPassword() {
