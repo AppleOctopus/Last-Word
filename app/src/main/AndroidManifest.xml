@@ -29,7 +29,7 @@
             android:label="@string/app_name" />
 
         <activity
-            android:name=".Introduction.IntroActivity"
+            android:name=".Introduction.LoginActivity"
             android:label="Last Word"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Introduction.LoginActivity">
+        <activity android:name=".Introduction.IntroActivity">
         </activity>
 
         <meta-data

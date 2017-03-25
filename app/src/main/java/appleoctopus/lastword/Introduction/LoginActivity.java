@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import appleoctopus.lastword.R;
 import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.models.User;
+import appleoctopus.lastword.util.SharePreference;
 
 /**
  * Created by lin1000 on 2017/3/19.
@@ -72,6 +73,9 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getProviderId());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
 
+                    // keep to local storage
+                    SharePreference.setFirebaseId(LoginActivity.this, user.getUid());
+
                     // Write a message to the database
                     User u = new User();
                     u.setFbId(user.getUid());
@@ -86,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("uid",user.getUid());
                     intent.putExtra("displayName",user.getDisplayName());
                     intent.putExtra("email",user.getEmail());
-                    //startActivity(intent);
+                    startActivity(intent);
 
                 } else {
                     // User is signed out
@@ -141,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Your account has been disabled. Sorry!",
                                     Toast.LENGTH_LONG).show();
                             FirebaseAuth.getInstance().signOut();
+                            SharePreference.setFirebaseId(LoginActivity.this, null);
                             LoginManager.getInstance().logOut();
                         }
 

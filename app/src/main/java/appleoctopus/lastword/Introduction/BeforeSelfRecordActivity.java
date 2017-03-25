@@ -19,6 +19,8 @@ import java.io.FileOutputStream;
 import appleoctopus.lastword.AfterSelfRecordActivity;
 import appleoctopus.lastword.BaseDynamicViewActivity;
 import appleoctopus.lastword.R;
+import appleoctopus.lastword.firebase.FirebaseDB;
+import appleoctopus.lastword.models.Video;
 import appleoctopus.lastword.util.SharePreference;
 
 public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
@@ -47,13 +49,18 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
             Uri videoUri = intent.getData();
             Log.d(TAG, videoUri.toString());
             Log.d(TAG, videoUri.getPath());
-            SharePreference.saveUri(this, videoUri.getPath());
+
+            //SharePreference.saveUri(this, videoUri.getPath());
+            //saveNewVideo();
+            Video v = new Video();
+            v.setLocalVideoUri(videoUri.toString());
+            FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
 
             mVideoView.setVideoURI(videoUri);
             mVideoView.start();
 
-            saveTheVideoToSpecificPath(intent);
-            deleteTheOriginalFile(videoUri);
+            //saveTheVideoToSpecificPath(intent);
+            //deleteTheOriginalFile(videoUri);
 
             Intent i = new Intent();
             i.setClass(this, AfterSelfRecordActivity.class);
