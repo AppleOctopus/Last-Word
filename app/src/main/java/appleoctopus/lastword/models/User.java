@@ -20,6 +20,7 @@ public class User {
     private Boolean isShowIntro; // ture by default and false after intro completed
     private Boolean isImportFriend; //true by default and false after 1st time friend import
     private List<Video> videos;
+    private Boolean isEmailVerified;
 
 
     public User() {
@@ -114,6 +115,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getEmailVerified() {
+        return isEmailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        isEmailVerified = emailVerified;
     }
 
     public void saveUser() {
