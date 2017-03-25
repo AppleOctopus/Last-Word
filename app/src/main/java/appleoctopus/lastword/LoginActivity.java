@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.models.User;
@@ -64,12 +65,41 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in
+                    // User is signed in , proactily update user information everytime user signed_in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getDisplayName());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getProviderId());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.isEmailVerified());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getToken(false).getResult().getToken());
+
+                    // If the above were null, iterate the provider data
+                    // and set with the first non null data
+
+                    //Just leave here for backup and monitor whether disaplay name and photourl will be different from directly getting from user object
+                    for (UserInfo userInfo : user.getProviderData()) {
+                        if (userInfo.getDisplayName() != null) {
+                            Log.d(TAG, "onAuthStateChanged:signed_in: userInfo.getDisplayName()" + userInfo.getDisplayName());
+                        }
+                        if (userInfo.getPhotoUrl() != null) {
+                            Log.d(TAG, "onAuthStateChanged:signed_in: userInfo.getPhotoUrl()" + userInfo.getPhotoUrl());
+                        }
+                    }
+
+                    if(!user.isEmailVerified()) {
+
+                        user.sendEmailVerification()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "Verification Email sent.");
+                                        }
+                                    }
+                                });
+                    }
 
                     // Write a message to the database
                     User u = new User();
@@ -77,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                     u.setDisplayName(user.getDisplayName());
                     u.setFbEmail(user.getEmail());
                     u.setFbPhotoUrl(user.getPhotoUrl().toString());
+                    u.setEmailVerified(user.isEmailVerified());
                     //user.getProviderData();
 
                     FirebaseDB.getInstance().saveNewUser(u);
@@ -91,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
         // ...
@@ -146,6 +176,26 @@ public class LoginActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+
+        /**
+        mAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "linkWithCredential:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });*/
+
     }
 
 
