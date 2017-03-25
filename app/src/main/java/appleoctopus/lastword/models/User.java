@@ -11,6 +11,7 @@ public class User {
 
     private String fbId;
     private String fbEmail;
+    private String fbPhotoUrl;
     private String googleId;
     private String googleEmail;
     private String displayName;
@@ -57,6 +58,14 @@ public class User {
 
     public void setFbEmail(String fbEmail) {
         this.fbEmail = fbEmail;
+    }
+
+    public String getFbPhotoUrl() {
+        return fbPhotoUrl;
+    }
+
+    public void setFbPhotoUrl(String fbPhotoUrl) {
+        this.fbPhotoUrl = fbPhotoUrl;
     }
 
     public String getGoogleId() {

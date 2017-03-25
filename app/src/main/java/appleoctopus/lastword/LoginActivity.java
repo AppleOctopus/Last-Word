@@ -26,8 +26,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
+import appleoctopus.lastword.firebase.FirebaseDB;
+import appleoctopus.lastword.models.User;
 
 /**
  * Created by lin1000 on 2017/3/19.
@@ -69,6 +70,16 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getProviderId());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
+
+                    // Write a message to the database
+                    User u = new User();
+                    u.setFbId(user.getUid());
+                    u.setDisplayName(user.getDisplayName());
+                    u.setFbEmail(user.getEmail());
+                    u.setFbPhotoUrl(user.getPhotoUrl().toString());
+                    //user.getProviderData();
+
+                    FirebaseDB.getInstance().saveNewUser(u);
 
                     Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
                     intent.putExtra("uid",user.getUid());
@@ -150,13 +161,6 @@ public class LoginActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_logout:
-                // Write a message to the database
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("message");
-                myRef.setValue("Logging Out");
-
-                //DatabaseReference mDatabase = null;
-                //mDatabase = FirebaseDatabase.getInstance().getReference();
 
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
