@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.isEmailVerified());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getToken(false).getResult().getToken());
+                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getToken(false).getResult().getToken());
 
                     // If the above were null, iterate the provider data
                     // and set with the first non null data
@@ -113,7 +113,9 @@ public class LoginActivity extends AppCompatActivity {
                     u.setFbEmail(user.getEmail());
                     u.setFbPhotoUrl(user.getPhotoUrl().toString());
                     u.setEmailVerified(user.isEmailVerified());
+
                     //user.getProviderData();
+                    u.fetchVideoList();
 
                     FirebaseDB.getInstance().saveNewUser(u);
 

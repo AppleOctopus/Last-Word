@@ -1,14 +1,29 @@
 package appleoctopus.lastword.models;
 
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import appleoctopus.lastword.firebase.FirebaseDB;
 
 /**
  * Created by lin1000 on 2017/3/19.
  */
 
+@IgnoreExtraProperties
 public class User {
 
-
+    @Exclude
+    private final static String TAG = "User";
     private String fbId;
     private String fbEmail;
     private String fbPhotoUrl;
@@ -19,9 +34,12 @@ public class User {
     private String password; //user
     private Boolean isShowIntro; // ture by default and false after intro completed
     private Boolean isImportFriend; //true by default and false after 1st time friend import
-    private List<Video> videos;
+    private List<String> videoKeys;
     private Boolean isEmailVerified;
+    private String lastUpdateTime;
 
+    @Exclude
+    private List<Video> videoList;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -101,12 +119,12 @@ public class User {
         isImportFriend = importFriend;
     }
 
-    public List<Video> getVideos() {
-        return videos;
+    public List<String> getVideoKeys() {
+        return videoKeys;
     }
 
-    public void setVideos(List<Video> videos) {
-        this.videos = videos;
+    public void setVideoKeys(List<String> videoKeys) {
+        this.videoKeys = videoKeys;
     }
 
     public String getPassword() {
@@ -125,10 +143,59 @@ public class User {
         isEmailVerified = emailVerified;
     }
 
-    public void saveUser() {
-        //Add YOUR Firebase Reference URL instead of the following URL
-//        Firebase myFirebaseRef = new Firebase("https://lastword-6763b.firebaseio.com/ ");
-//        myFirebaseRef = myFirebaseRef.child("users").child(getId());
-//        myFirebaseRef.setValue(this);
+    public String getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(String lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("fbId", fbId);
+        result.put("fbEmail", fbEmail);
+        result.put("fbPhotoUrl", fbPhotoUrl);
+        result.put("googleId", googleId);
+        result.put("googleEmail", googleEmail);
+        result.put("displayName", displayName);
+        result.put("phoneNumber", phoneNumber);
+        result.put("password", password);
+        result.put("isShowIntro", isShowIntro);
+        result.put("isImportFriend", isImportFriend);
+        result.put("isEmailVerified", isEmailVerified);
+        result.put("videos", videoKeys);
+        result.put("lastUpdateTime", lastUpdateTime);
+
+        return result;
+    }
+
+    @Exclude
+    public void fetchVideoList() {
+
+        videoList = new ArrayList<Video>();
+
+        FirebaseDB.getInstance().getReference().child(FirebaseDB.VIDEO).child(fbId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get User Object
+                Log.d(TAG, "addListenerForSingleValueEvent.ValueEventListener dataSnapshot ");
+                for (DataSnapshot videoKeyDataSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "addListenerForSingleValueEvent.ValueEventListener videoKeyDataSnapshot.getKey() " + videoKeyDataSnapshot.getKey());
+                    Video v = videoKeyDataSnapshot.getValue(Video.class);
+                    Log.d(TAG, "addListenerForSingleValueEvent.ValueEventListener videokey " + v.getLocalVideoUri());
+                    videoList.add(v);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //return videoList;
+
     }
 }

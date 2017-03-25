@@ -3,14 +3,20 @@ package appleoctopus.lastword.firebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import appleoctopus.lastword.models.User;
 import appleoctopus.lastword.models.Video;
+import appleoctopus.lastword.util.Time;
 
 /**
  * Created by lin1000 on 2017/3/25.
  */
 
 public class FirebaseDB {
+
+    private static final String TAG = "FirebaseDB";
 
     //singlton
     private static FirebaseDB instance;
@@ -50,14 +56,22 @@ public class FirebaseDB {
     }
 
     public void saveNewUser(User user){
-        getReference().child(USER).child(user.getFbId()).setValue(user);
+        user.setLastUpdateTime(Time.getCurrentTimeUTC());
+        Map<String,Object> userMap = user.toMap();
+        getReference().child(USER).child(user.getFbId()).updateChildren(userMap);
     }
 
     public void saveNewVideo(Video video, String userFbId){
-        getReference().child(VIDEO).child(userFbId).setValue(video);
+        String key = getReference().child(VIDEO).child(userFbId).push().getKey();
+
+        //Using this atomic update approach in case we will need to duplicate this key in different place of json tree
+        video.setLastUpdateTime(Time.getCurrentTimeUTC());
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/" + VIDEO +"/" + userFbId + "/" + key, video);
+
+        //Update both places as an atomic operations
+        getReference().updateChildren(childUpdates);
+
+
     }
-
-
-
-
 }
