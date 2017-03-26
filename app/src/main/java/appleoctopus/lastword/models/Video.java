@@ -8,6 +8,10 @@ import java.util.List;
 
 public class Video {
 
+    public Video(){
+        // Default constructor required for calls to DataSnapshot.getValue(Video.class)
+    }
+
     private User owner;
     private String password; // a video specific password which could be used to access this video after protected until date
     private String category; // category of this video

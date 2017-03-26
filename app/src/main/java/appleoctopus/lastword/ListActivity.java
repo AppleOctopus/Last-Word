@@ -4,12 +4,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.models.Video;
+import appleoctopus.lastword.util.SharePreference;
+
+import static appleoctopus.lastword.firebase.FirebaseDB.VIDEO;
 
 public class ListActivity extends AppCompatActivity {
     private static String TAG = ListActivity.class.getName();
@@ -19,7 +23,40 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ValueEventListener postListener = new ValueEventListener() {
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Video v = dataSnapshot.getValue(Video.class);
+                if (v != null) {
+                    v.getLocalVideoUri();
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Video v = dataSnapshot.getValue(Video.class);
+                if (v != null) {
+                    v.getLocalVideoUri();
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                   Video v = dataSnapshot.getValue(Video.class);
@@ -36,7 +73,10 @@ public class ListActivity extends AppCompatActivity {
             }
         };
 
-        FirebaseDB.getInstance().getReference().addValueEventListener(postListener);
-
+        FirebaseDB.getInstance()
+                .getReference(VIDEO)
+                .child(SharePreference.getFirebaseId(this))
+                .addChildEventListener(childEventListener);
+//                .addValueEventListener(valueEventListener);
     }
 }
