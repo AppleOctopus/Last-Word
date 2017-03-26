@@ -6,8 +6,7 @@
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/com_facebook_blue" />
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -15,7 +14,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        />
 
 
 </RelativeLayout>

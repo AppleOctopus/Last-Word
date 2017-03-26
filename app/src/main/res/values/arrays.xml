@@ -6,4 +6,11 @@
         　　        <item>想和與我錯過的你</item>
         　　        <item>和我的日常</item>
     </string-array>
+
+    <array name="bg_ids">
+        　　        <item>@drawable/bg_catogory01</item>
+        　　        <item>@drawable/bg_catogory02</item>
+        　　        <item>@drawable/bg_catogory03</item>
+        　　        <item>@drawable/bg_catogory04</item>
+    </array>
 </resources>

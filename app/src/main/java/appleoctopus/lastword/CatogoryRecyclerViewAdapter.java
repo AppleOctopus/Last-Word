@@ -2,6 +2,7 @@ package appleoctopus.lastword;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,21 +18,24 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
     private String[] mTitles;
+    private TypedArray mBgIds;
 
     public CatogoryRecyclerViewAdapter(Context context) {
         mTitles = context.getResources().getStringArray(R.array.titles);
+        mBgIds = context.getResources().obtainTypedArray(R.array.bg_ids);
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public NormalTextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new NormalTextViewHolder(mLayoutInflater.inflate(R.layout.layout_recycler_view_item, parent, false));
+        return new NormalTextViewHolder(mLayoutInflater.inflate(R.layout.item_catagory, parent, false));
     }
 
     @Override
     public void onBindViewHolder(NormalTextViewHolder holder, int position) {
         holder.mTextView.setText(mTitles[position]);
+        holder.mImageView.setImageDrawable(mBgIds.getDrawable(position));
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
