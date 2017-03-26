@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import appleoctopus.lastword.firebase.FirebaseDB;
+import appleoctopus.lastword.util.Time;
 
 /**
  * Created by lin1000 on 2017/3/19.
@@ -61,7 +62,6 @@ public class User {
         this.displayName = displayName;
     }
 
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -69,7 +69,6 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
 
     public String getFbEmail() {
         return fbEmail;
@@ -196,6 +195,14 @@ public class User {
         });
 
         //return videoList;
+    }
 
+    @Exclude
+    public void autoPopulateWheneverPossible(){
+
+        String timestamp  = Time.getCurrentTimeUTC();
+
+        setShowIntro(false);
+        setLastUpdateTime(timestamp);
     }
 }

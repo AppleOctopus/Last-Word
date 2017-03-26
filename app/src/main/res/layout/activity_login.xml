@@ -21,6 +21,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bg_start"
+        android:src="@drawable/bg_start"
+        android:layout_weight="1" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

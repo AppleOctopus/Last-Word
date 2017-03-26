@@ -1,28 +1,35 @@
 package appleoctopus.lastword.models;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.List;
+
+import appleoctopus.lastword.util.Time;
 
 /**
  * Created by lin1000 on 2017/3/24.
  */
 
+@IgnoreExtraProperties
 public class Video {
     public static int CATOGORY_THX = 1;
     public static int CATOGORY_SORRY = 2;
     public static int CATOGORY_MISS = 3;
     public static int CATOGORY_LIFE = 4;
 
-    public Video(){
-        // Default constructor required for calls to DataSnapshot.getValue(Video.class)
-    }
+    @Exclude
+    private final static String TAG = "Video";
 
+    @Exclude
     private User owner;
+
     private String password; // a video specific password which could be used to access this video after protected until date
     private int category; // category of this video
-    private String isLocalExist; // true is the video is available on local
+    private Boolean isLocalExist; // true is the video is available on local
     private String localVideoUri;// local uri of the video
-    private String lsRemoteExist; // true if the remote uri is available
-    private String rmoteVideoUri;//remote uri of the video
+    private Boolean IsRemoteExist; // true if the remote uri is available
+    private String remoteVideoUri;//remote uri of the video
     private String videoLength; //length of the video
     private List<User> sharedUsers; //list of users could access to this video after protected until date.
     private String videoFormat;// mp4, avi or others
@@ -32,6 +39,10 @@ public class Video {
     private String publicUntil; // date of available for public access
     private String destroyUntil; // date of unavailable for any access
     private String lastUpdateTime; // date of video updated
+
+    public Video(){
+        // Default constructor required for calls to DataSnapshot.getValue(Video.class)
+    }
 
     public User getOwner() {
         return owner;
@@ -57,11 +68,11 @@ public class Video {
         this.category = category;
     }
 
-    public String getIsLocalExist() {
+    public Boolean getLocalExist() {
         return isLocalExist;
     }
 
-    public void setIsLocalExist(String isLocalExist) {
+    public void setLocalExist(Boolean isLocalExist) {
         this.isLocalExist = isLocalExist;
     }
 
@@ -73,20 +84,20 @@ public class Video {
         this.localVideoUri = localVideoUri;
     }
 
-    public String getLsRemoteExist() {
-        return lsRemoteExist;
+    public Boolean getRemoteExist() {
+        return IsRemoteExist;
     }
 
-    public void setLsRemoteExist(String lsRemoteExist) {
-        this.lsRemoteExist = lsRemoteExist;
+    public void setRemoteExist(Boolean IsRemoteExist) {
+        this.IsRemoteExist = IsRemoteExist;
     }
 
-    public String getRmoteVideoUri() {
-        return rmoteVideoUri;
+    public String getRemoteVideoUri() {
+        return remoteVideoUri;
     }
 
-    public void setRmoteVideoUri(String rmoteVideoUri) {
-        this.rmoteVideoUri = rmoteVideoUri;
+    public void setRemoteVideoUri(String remoteVideoUri) {
+        this.remoteVideoUri = remoteVideoUri;
     }
 
     public String getVideoLength() {
@@ -160,4 +171,27 @@ public class Video {
     public void setLastUpdateTime(String lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }
+
+    @Exclude
+    public void autoPopulateWheneverPossible(){
+
+        String timestamp  = Time.getCurrentTimeUTC();
+
+        if (getLocalVideoUri() != null && !getLocalVideoUri().equalsIgnoreCase("")){
+            setLocalExist(true);
+        } else{
+            setLocalExist(false);
+        }
+
+        if (getRemoteVideoUri() != null && !getRemoteVideoUri().equalsIgnoreCase("")) {
+            setRemoteExist(true);
+        } else {
+            setRemoteExist(false);
+        }
+
+        setCreatedAt(timestamp);
+        setLastUpdateTime(timestamp);
+
+    }
+
 }

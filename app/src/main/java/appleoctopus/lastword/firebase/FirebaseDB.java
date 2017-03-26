@@ -56,7 +56,10 @@ public class FirebaseDB {
     }
 
     public void saveNewUser(User user){
-        user.setLastUpdateTime(Time.getCurrentTimeUTC());
+
+        //auto fields population
+        user.autoPopulateWheneverPossible();
+
         Map<String,Object> userMap = user.toMap();
         getReference().child(USER).child(user.getFbId()).updateChildren(userMap);
     }
@@ -64,14 +67,17 @@ public class FirebaseDB {
     public void saveNewVideo(Video video, String userFbId){
         String key = getReference().child(VIDEO).child(userFbId).push().getKey();
 
+        //auto fields population
+        video.autoPopulateWheneverPossible();
+
+
         //Using this atomic update approach in case we will need to duplicate this key in different place of json tree
         video.setLastUpdateTime(Time.getCurrentTimeUTC());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/" + VIDEO +"/" + userFbId + "/" + key, video);
 
-        //Update both places as an atomic operations
+        //When the childUpdates map has been well prepared, update both places as an atomic operation
         getReference().updateChildren(childUpdates);
-
 
     }
 }
