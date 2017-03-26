@@ -2,6 +2,8 @@ package appleoctopus.lastword;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,16 +22,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailRecyclerViewAdapter.ThumbNailViewHolder> {
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
-    private ArrayList<Video> mVideo;
+    private ArrayList<Video> mVideos;
 
     public DetailRecyclerViewAdapter(Context context) {
-        mVideo = new ArrayList<>();
+        mVideos = new ArrayList<>();
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
     }
 
     public void updateData(ArrayList<Video> video) {
-        mVideo = video;
+        mVideos = video;
         notifyDataSetChanged();
     }
 
@@ -39,22 +41,28 @@ public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailRecycl
     }
 
     @Override
-    public void onBindViewHolder(ThumbNailViewHolder holder, int position) {
-         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(ThumbNailViewHolder holder, final int position) {
+        Drawable d = mContext.getResources().
+                getDrawable(R.drawable.com_facebook_profile_picture_blank_portrait);
+        holder.mCircleImageView.setImageDrawable(d);
+        holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // TODO: play the video
-                Intent i = new Intent();
-                // i.setClass(mContext, DetailActivity.class);
-                // mContext.startActivity(i);
+                Video video = mVideos.get(position);
+                String uriString = video.getLocalVideoUri();
+                if (uriString != null) {
+                    Uri uri = Uri.parse(uriString);
+                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                    mContext.startActivity(i);
+                }
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return mVideos.size();
     }
 
     public static class ThumbNailViewHolder extends RecyclerView.ViewHolder {
