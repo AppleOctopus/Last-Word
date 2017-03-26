@@ -48,6 +48,7 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
             //saveNewVideo();
             Video v = new Video();
             v.setLocalVideoUri(videoUri.toString());
+            v.setCategory(Video.CATOGORY_LIFE);
             FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
 
             //saveTheVideoToSpecificPath(intent);

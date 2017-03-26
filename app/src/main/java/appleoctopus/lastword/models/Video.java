@@ -7,6 +7,10 @@ import java.util.List;
  */
 
 public class Video {
+    public static int CATOGORY_THX = 1;
+    public static int CATOGORY_SORRY = 2;
+    public static int CATOGORY_MISS = 3;
+    public static int CATOGORY_LIFE = 4;
 
     public Video(){
         // Default constructor required for calls to DataSnapshot.getValue(Video.class)
@@ -14,7 +18,7 @@ public class Video {
 
     private User owner;
     private String password; // a video specific password which could be used to access this video after protected until date
-    private String category; // category of this video
+    private int category; // category of this video
     private String isLocalExist; // true is the video is available on local
     private String localVideoUri;// local uri of the video
     private String lsRemoteExist; // true if the remote uri is available
@@ -45,11 +49,11 @@ public class Video {
         this.password = password;
     }
 
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 

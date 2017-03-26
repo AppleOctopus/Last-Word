@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -21,17 +22,28 @@ import static appleoctopus.lastword.firebase.FirebaseDB.VIDEO;
 
 public class DetailActivity extends AppCompatActivity {
     private static String TAG = DetailActivity.class.getName();
+    static String CATEGORY_KEY = "CATEGORY";
 
     private RecyclerView mRecyclerView;
     private DetailRecyclerViewAdapter mAdapter;
     private ArrayList<Video> videos = new ArrayList();
 
+    private int catogory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        catogory = getIntent().getIntExtra(CATEGORY_KEY, -1);
+        if (catogory == -1) {
+            Toast.makeText(this, "找不到此類別", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        int numberInRow = 4;
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberInRow));
         mAdapter = new DetailRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -40,8 +52,9 @@ public class DetailActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Video v = dataSnapshot.getValue(Video.class);
                 if (v != null) {
-                    v.getLocalVideoUri();
-                    videos.add(v);
+                     if (v.getCategory() == catogory) {
+                        videos.add(v);
+                    }
                     mAdapter.updateData(videos);
                 }
             }

@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 
+import appleoctopus.lastword.AfterSelfRecordActivity;
 import appleoctopus.lastword.R;
 import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.models.User;
@@ -38,19 +39,15 @@ import appleoctopus.lastword.util.SharePreference;
  */
 
 public class LoginActivity extends AppCompatActivity {
-
     //firebase auth
     private static final String TAG = "facebooklogin";
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
 
-
     //FaceBook
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,11 +116,18 @@ public class LoginActivity extends AppCompatActivity {
 
                     FirebaseDB.getInstance().saveNewUser(u);
 
-                    Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
-                    intent.putExtra("uid",user.getUid());
-                    intent.putExtra("displayName",user.getDisplayName());
-                    intent.putExtra("email",user.getEmail());
+                    Intent intent = null;
+                    if (SharePreference.getIsFirstOpen(LoginActivity.this)) {
+                        intent = new Intent(getApplicationContext(), IntroActivity.class);
+                        intent.putExtra("uid",user.getUid());
+                        intent.putExtra("displayName",user.getDisplayName());
+                        intent.putExtra("email",user.getEmail());
+                        SharePreference.setIsFirstOpen(LoginActivity.this, false);
+                    } else {
+                        intent = new Intent(getApplicationContext(), AfterSelfRecordActivity.class);
+                    }
                     startActivity(intent);
+
 
                 } else {
                     // User is signed out
@@ -206,8 +210,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_login, menu);
@@ -246,9 +248,7 @@ public class LoginActivity extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-
     }
-
 
     //FaceBook
     @Override

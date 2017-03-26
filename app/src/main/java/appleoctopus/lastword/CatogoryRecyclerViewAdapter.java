@@ -33,7 +33,7 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
     }
 
     @Override
-    public void onBindViewHolder(NormalTextViewHolder holder, int position) {
+    public void onBindViewHolder(NormalTextViewHolder holder, final int position) {
         holder.mTextView.setText(mTitles[position]);
         holder.mImageView.setImageDrawable(mBgIds.getDrawable(position));
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +41,7 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
             public void onClick(View v) {
                 Intent i = new Intent();
                 i.setClass(mContext, DetailActivity.class);
+                i.putExtra(DetailActivity.CATEGORY_KEY, position);
                 mContext.startActivity(i);
             }
         });

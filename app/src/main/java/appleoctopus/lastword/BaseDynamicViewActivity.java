@@ -55,6 +55,7 @@ public class BaseDynamicViewActivity extends AppCompatActivity
                 }
 
                 startActivity(i);
+                finish();
             }
         };
 

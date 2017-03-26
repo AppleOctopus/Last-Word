@@ -13,8 +13,16 @@ public class SharePreference {
     private static final String DATA = "DATA";
     private static final String URI = "URI";
     private static final String FIREBASE_ID = "FIRE_BASE_ID";
+    private static final String IS_FIRST_OPEN = "IS_FIRSE_OPEN";
 
-
+    public static boolean getIsFirstOpen(Context context){
+        SharedPreferences settings = context.getSharedPreferences(DATA, MODE_PRIVATE);
+        return settings.getBoolean(IS_FIRST_OPEN, true);
+    }
+    public static void setIsFirstOpen(Context context, boolean isFirstOpen){
+        SharedPreferences settings = context.getSharedPreferences(DATA, MODE_PRIVATE);
+        settings.edit().putBoolean(IS_FIRST_OPEN, isFirstOpen).apply();
+    }
 
     public static String getFirebaseId(Context context){
         SharedPreferences settings = context.getSharedPreferences(DATA, MODE_PRIVATE);
