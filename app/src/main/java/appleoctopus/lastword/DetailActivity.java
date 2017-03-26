@@ -15,13 +15,13 @@ import appleoctopus.lastword.util.SharePreference;
 
 import static appleoctopus.lastword.firebase.FirebaseDB.VIDEO;
 
-public class ListActivity extends AppCompatActivity {
-    private static String TAG = ListActivity.class.getName();
+public class DetailActivity extends AppCompatActivity {
+    private static String TAG = DetailActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_detail);
 
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -77,6 +77,5 @@ public class ListActivity extends AppCompatActivity {
                 .getReference(VIDEO)
                 .child(SharePreference.getFirebaseId(this))
                 .addChildEventListener(childEventListener);
-//                .addValueEventListener(valueEventListener);
-    }
+     }
 }

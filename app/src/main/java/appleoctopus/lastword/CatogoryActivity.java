@@ -16,6 +16,6 @@ public class CatogoryActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new RecyclerViewAdapter(this));
+        recyclerView.setAdapter(new CatogoryRecyclerViewAdapter(this));
     }
 }

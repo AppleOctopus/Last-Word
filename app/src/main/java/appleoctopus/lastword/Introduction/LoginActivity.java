@@ -216,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
+        // Handle item_catagory selection
         switch (item.getItemId()) {
             case R.id.action_logout:
 

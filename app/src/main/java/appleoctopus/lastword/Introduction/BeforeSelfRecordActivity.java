@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.VideoView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +17,6 @@ import java.io.FileOutputStream;
 
 import appleoctopus.lastword.AfterSelfRecordActivity;
 import appleoctopus.lastword.BaseDynamicViewActivity;
-import appleoctopus.lastword.R;
 import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.models.Video;
 import appleoctopus.lastword.util.SharePreference;
@@ -27,13 +25,9 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
     private static final String TAG = BeforeSelfRecordActivity.class.getSimpleName();
     private static final int REQUEST_VIDEO_CAPTURE = 1;
 
-    private VideoView mVideoView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mVideoView = (VideoView) findViewById(R.id.videoView);
         dispatchTakeVideoIntent();
         setButtonListener(new View.OnClickListener() {
             @Override
@@ -55,9 +49,6 @@ public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
             Video v = new Video();
             v.setLocalVideoUri(videoUri.toString());
             FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
-
-            mVideoView.setVideoURI(videoUri);
-            mVideoView.start();
 
             //saveTheVideoToSpecificPath(intent);
             //deleteTheOriginalFile(videoUri);

@@ -3,7 +3,6 @@ package appleoctopus.lastword;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,12 @@ import android.widget.TextView;
  * Created by allenwang on 2017/3/23.
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.NormalTextViewHolder> {
+public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRecyclerViewAdapter.NormalTextViewHolder> {
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
     private String[] mTitles;
 
-    public RecyclerViewAdapter(Context context) {
+    public CatogoryRecyclerViewAdapter(Context context) {
         mTitles = context.getResources().getStringArray(R.array.titles);
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
@@ -37,7 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Intent i = new Intent();
-                i.setClass(mContext, ListActivity.class);
+                i.setClass(mContext, DetailActivity.class);
                 mContext.startActivity(i);
             }
         });
