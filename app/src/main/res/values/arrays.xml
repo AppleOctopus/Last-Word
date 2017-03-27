@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="titles">
-        　　        <item>說不完的感謝</item>
-        　　        <item>想和你說聲抱歉...</item>
+        　　        <item>想和你說聲感謝</item>
+        　　        <item>想和你說聲抱歉</item>
         　　        <item>想和與我錯過的你</item>
-        　　        <item>和我的日常</item>
+        　　        <item>記錄日常的我</item>
     </string-array>
 
     <array name="bg_ids">
