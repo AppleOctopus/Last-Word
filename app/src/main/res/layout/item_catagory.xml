@@ -19,5 +19,14 @@
         android:textColor="@android:color/white"
         />
 
+    <Button
+        android:id="@+id/button_record"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:background="@android:drawable/ic_menu_camera" />
+
 
 </RelativeLayout>

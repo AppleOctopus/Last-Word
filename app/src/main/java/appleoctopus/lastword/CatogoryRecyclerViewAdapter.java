@@ -1,12 +1,15 @@
 package appleoctopus.lastword;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,8 +38,8 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
     @Override
     public void onBindViewHolder(NormalTextViewHolder holder, final int position) {
         holder.mTextView.setText(mTitles[position]);
-        holder.mImageView.setImageDrawable(mBgIds.getDrawable(position));
-        holder.mImageView.setOnClickListener(new View.OnClickListener() {
+        holder.mBgImageView.setImageDrawable(mBgIds.getDrawable(position));
+        holder.mBgImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent();
@@ -44,6 +47,16 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
                 i.putExtra(DetailActivity.CATEGORY_KEY, position);
                 mContext.startActivity(i);
             }
+        });
+
+        holder.mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                //takeVideoIntent.putExtra(CATEGORY, position);
+                ((Activity)mContext).startActivityForResult(
+                        takeVideoIntent, position);
+             }
         });
     }
 
@@ -54,13 +67,14 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
 
     public static class NormalTextViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
-        ImageView mImageView;
+        ImageView mBgImageView;
+        Button mButton;
+
         NormalTextViewHolder(View view) {
             super(view);
             mTextView = (TextView) view.findViewById(R.id.textView);
-            mImageView = (ImageView) view.findViewById(R.id.image_view);
-
-
+            mBgImageView = (ImageView) view.findViewById(R.id.image_view);
+            mButton = (Button) view.findViewById(R.id.button_record);
         }
     }
 }
