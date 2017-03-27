@@ -80,4 +80,9 @@ public class FirebaseDB {
         getReference().updateChildren(childUpdates);
 
     }
+
+    public void removeVideo(Video video, String userFbId, String videoKey){
+        DatabaseReference toBeRemoved = getReference().child(VIDEO).child(userFbId).child(videoKey);
+        toBeRemoved.removeValue();
+    }
 }
