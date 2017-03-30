@@ -2,8 +2,10 @@ package appleoctopus.lastword;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,9 +44,12 @@ public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailRecycl
 
     @Override
     public void onBindViewHolder(ThumbNailViewHolder holder, final int position) {
-        Drawable d = mContext.getResources().
-                getDrawable(R.drawable.com_facebook_profile_picture_blank_portrait);
-        holder.mCircleImageView.setImageDrawable(d);
+        Bitmap b = ThumbnailUtils.createVideoThumbnail(
+                mVideos.get(position).getLocalVideoUri(),
+                MediaStore.Video.Thumbnails.MICRO_KIND);
+        //Drawable d = mContext.getResources().
+                //getDrawable(R.drawable.com_facebook_profile_picture_blank_portrait);
+        holder.mCircleImageView.setImageBitmap(b);
         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
