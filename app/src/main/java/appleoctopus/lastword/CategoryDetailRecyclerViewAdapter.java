@@ -4,13 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -21,12 +22,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by allenwang on 2017/3/23.
  */
 
-public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailRecyclerViewAdapter.ThumbNailViewHolder> {
+public class CategoryDetailRecyclerViewAdapter extends RecyclerView.Adapter<CategoryDetailRecyclerViewAdapter.ThumbNailViewHolder> {
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
     private ArrayList<Video> mVideos;
 
-    public DetailRecyclerViewAdapter(Context context) {
+    public CategoryDetailRecyclerViewAdapter(Context context) {
         mVideos = new ArrayList<>();
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
@@ -55,12 +56,11 @@ public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailRecycl
             public void onClick(View v) {
 
                 Video video = mVideos.get(position);
-                String uriString = video.getLocalVideoUri();
-                if (uriString != null) {
-                    Uri uri = Uri.parse(uriString);
-                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                    mContext.startActivity(i);
-                }
+
+                Intent i = new Intent(mContext, VideoDetailActivity.class);
+                i.putExtra(VideoDetailActivity.VIDEO_KEY, (new Gson()).toJson(video));
+                mContext.startActivity(i);
+
             }
         });
     }

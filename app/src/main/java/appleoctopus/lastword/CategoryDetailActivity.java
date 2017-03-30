@@ -20,12 +20,12 @@ import appleoctopus.lastword.util.SharePreference;
 
 import static appleoctopus.lastword.firebase.FirebaseDB.VIDEO;
 
-public class DetailActivity extends AppCompatActivity {
-    private static String TAG = DetailActivity.class.getName();
+public class CategoryDetailActivity extends AppCompatActivity {
+    private static String TAG = CategoryDetailActivity.class.getName();
     static String CATEGORY_KEY = "CATEGORY";
 
     private RecyclerView mRecyclerView;
-    private DetailRecyclerViewAdapter mAdapter;
+    private CategoryDetailRecyclerViewAdapter mAdapter;
     private ArrayList<Video> videos = new ArrayList();
 
     private int catogory;
@@ -44,7 +44,7 @@ public class DetailActivity extends AppCompatActivity {
         int numberInRow = 4;
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberInRow));
-        mAdapter = new DetailRecyclerViewAdapter(this);
+        mAdapter = new CategoryDetailRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
         ChildEventListener childEventListener = new ChildEventListener() {

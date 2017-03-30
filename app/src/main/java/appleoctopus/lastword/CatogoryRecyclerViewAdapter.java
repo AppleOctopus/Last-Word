@@ -43,8 +43,8 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
             @Override
             public void onClick(View v) {
                 Intent i = new Intent();
-                i.setClass(mContext, DetailActivity.class);
-                i.putExtra(DetailActivity.CATEGORY_KEY, position);
+                i.setClass(mContext, CategoryDetailActivity.class);
+                i.putExtra(CategoryDetailActivity.CATEGORY_KEY, position);
                 mContext.startActivity(i);
             }
         });
