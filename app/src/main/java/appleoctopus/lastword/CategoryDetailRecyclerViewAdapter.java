@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import appleoctopus.lastword.models.Video;
-import appleoctopus.lastword.util.Util;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -48,14 +46,9 @@ public class CategoryDetailRecyclerViewAdapter extends RecyclerView.Adapter<Cate
     @Override
     public void onBindViewHolder(ThumbNailViewHolder holder, final int position) {
         Video v = mVideos.get(position);
-        String s = v.getLocalVideoUri();
-        String path = Util.getPathFromUri(mContext, Uri.parse(s));
-
         Bitmap b = ThumbnailUtils.createVideoThumbnail(
-                path,
+                v.getLocalVideoPath(),
                 MediaStore.Video.Thumbnails.MICRO_KIND);
-        //Drawable d = mContext.getResources().
-                //getDrawable(R.drawable.com_facebook_profile_picture_blank_portrait);
         holder.mCircleImageView.setImageBitmap(b);
         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override

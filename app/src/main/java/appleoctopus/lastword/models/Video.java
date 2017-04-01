@@ -28,7 +28,7 @@ public class Video {
     private int category; // category of this video
     private Boolean isLocalExist; // true is the video is available on local
     private String localVideoUri;// local uri of the video
-    private String localVideoAbsolutePath;// local uri of the video
+    private String localVideoPath;// local uri of the video
     private Boolean IsRemoteExist; // true if the remote uri is available
     private String remoteVideoUri;//remote uri of the video
     private String videoLength; //length of the video
@@ -174,12 +174,12 @@ public class Video {
     }
 
 
-    public String getLocalVideoAbsolutePath() {
-        return localVideoAbsolutePath;
+    public String getLocalVideoPath() {
+        return localVideoPath;
     }
 
-    public void setLocalVideoAbsolutePath(String localVideoAbsolutePath) {
-        this.localVideoAbsolutePath = localVideoAbsolutePath;
+    public void setLocalVideoPath(String localVideoPath) {
+        this.localVideoPath = localVideoPath;
     }
 
     @Exclude

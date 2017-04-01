@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.models.Video;
 import appleoctopus.lastword.util.SharePreference;
+import appleoctopus.lastword.util.Util;
 
 public class CatogoryActivity extends AppCompatActivity {
     static final int CAMERA_REQUEST = 1;
@@ -36,7 +37,8 @@ public class CatogoryActivity extends AppCompatActivity {
             Video v = new Video();
             v.setLocalVideoUri(videoUri.toString());
             v.setCategory(requestCode);
-            v.setLocalVideoAbsolutePath(videoUri.getPath());
+            v.setLocalVideoPath(Util.getPathFromUri(this, Uri.parse(videoUri.toString())));
+
             FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
         }
     }
