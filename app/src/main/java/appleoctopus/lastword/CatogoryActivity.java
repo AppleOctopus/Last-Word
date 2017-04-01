@@ -36,6 +36,7 @@ public class CatogoryActivity extends AppCompatActivity {
             Video v = new Video();
             v.setLocalVideoUri(videoUri.toString());
             v.setCategory(requestCode);
+            v.setLocalVideoAbsolutePath(videoUri.getPath());
             FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
         }
     }
