@@ -23,6 +23,8 @@ public class Video {
 
     @Exclude
     private User owner;
+    @Exclude
+    private String videoKey;
 
     private String password; // a video specific password which could be used to access this video after protected until date
     private int category; // category of this video
@@ -51,6 +53,14 @@ public class Video {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public String getVideoKey() {
+        return videoKey;
+    }
+
+    public void setVideoKey(String videoKey) {
+        this.videoKey = videoKey;
     }
 
     public String getPassword() {
@@ -173,7 +183,6 @@ public class Video {
         this.lastUpdateTime = lastUpdateTime;
     }
 
-
     public String getLocalVideoPath() {
         return localVideoPath;
     }
@@ -199,7 +208,12 @@ public class Video {
             setRemoteExist(false);
         }
 
-        setCreatedAt(timestamp);
+        //attach createdAt timestamp iff it's null
+        if(getCreatedAt()==null) {
+            setCreatedAt(timestamp);
+        }
+
+        //alwasy update timestamp
         setLastUpdateTime(timestamp);
 
     }

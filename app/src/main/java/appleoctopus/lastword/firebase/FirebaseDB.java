@@ -83,8 +83,21 @@ public class FirebaseDB {
 
     }
 
+    public void updateVideo(Video video, String userFbId){
+        //auto fields population
+        video.autoPopulateWheneverPossible();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/" + VIDEO +"/" + userFbId + "/" + video.getVideoKey(), video);
+
+        //When the childUpdates map has been well prepared, update both places as an atomic operation
+        getReference().updateChildren(childUpdates);
+    }
+
     public void removeVideo(Video video, String userFbId, String videoKey){
         DatabaseReference toBeRemoved = getReference().child(VIDEO).child(userFbId).child(videoKey);
         toBeRemoved.removeValue();
     }
+
+
 }
