@@ -31,6 +31,9 @@ public class UploadIntentService extends IntentService {
     public static final int STATUS_FINISHED = 1;
     public static final int STATUS_ERROR = 2;
 
+    private String token = "";
+    private String videoPath = "";
+
     public UploadIntentService() {
         super("uploadService");
     }
@@ -46,20 +49,20 @@ public class UploadIntentService extends IntentService {
         if (receiver == null) {
             receiver = new ResultReceiver(new Handler());
         }
-        String url = intent.getStringExtra("url");
+
+        videoPath = intent.getStringExtra("url");
 
         Bundle bundle = new Bundle();
-
-        if (!TextUtils.isEmpty(url)) {
+        if (!TextUtils.isEmpty(videoPath)) {
             /* Update UI: Download Service is Running */
             receiver.send(STATUS_RUNNING, Bundle.EMPTY);
 
             try {
-                String results = uploadFile(url);
+                boolean isSuccess = createVideo();
 
                 /* Sending result back to activity */
-                if (null != results && !results.isEmpty()) {
-                    bundle.putString("result", results);
+                if (isSuccess) {
+                    bundle.putBoolean("result", isSuccess);
                     receiver.send(STATUS_FINISHED, bundle);
                 }
             } catch (Exception e) {
@@ -84,9 +87,7 @@ public class UploadIntentService extends IntentService {
                 .add("client_secret", getString(R.string.dailymotion_api_secret))
                 .add("scope", "manage_videos")
                 .build();
-
-        String token = "";
-        try {
+         try {
             Response res = API.post("https://api.dailymotion.com/oauth/token", formBody);
             String jsonData = res.body().string();
             JSONObject jsonObject = new JSONObject(jsonData);
@@ -99,10 +100,9 @@ public class UploadIntentService extends IntentService {
     }
 
     private String getUploadUrl(){
-        String token = getToken();
 
         ArrayList<Pair> headers = new ArrayList<>();
-        Pair header = new Pair("Authorization", "Bearer " + token);
+        Pair header = new Pair("Authorization", "Bearer " + getToken());
         headers.add(header);
 
         String url = "";
@@ -117,26 +117,46 @@ public class UploadIntentService extends IntentService {
         return url;
     }
 
-    private String uploadFile(String filePath) {
-        String url = getUploadUrl();
+    private String getSecondUrl(String filePath) {
+        String firstUrl = getUploadUrl();
 
         RequestBody video = RequestBody.create(MediaType.parse("video/*"), new File(filePath));
-
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", filePath, video)
                 .build();
 
-        String jsonData = "";
+        String secondUrl = "";
         try {
-            Response res = API.post(url, requestBody);
-            jsonData = res.body().string();
+            Response res = API.post(firstUrl, requestBody);
+            String jsonData = res.body().string();
+            JSONObject jsonObject = new JSONObject(jsonData);
+            secondUrl = jsonObject.getString("url");
+        } catch (IOException | JSONException e) {
+        e.printStackTrace();
+    }
 
+        return secondUrl;
+    }
+
+    private boolean createVideo() {
+        String url = getSecondUrl(videoPath);
+
+        ArrayList<Pair> headers = new ArrayList<>();
+        Pair header = new Pair("Authorization", "Bearer " + token);
+        headers.add(header);
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("url", url)
+                .build();
+        boolean isSuccess = false;
+         try {
+            Response res = API.post("https://api.dailymotion.com/me/videos", headers, formBody);
+             isSuccess = res.code() == 200;
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return jsonData;
-
+        return isSuccess;
     }
 }

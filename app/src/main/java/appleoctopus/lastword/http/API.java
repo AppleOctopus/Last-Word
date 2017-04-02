@@ -21,10 +21,21 @@ public class API {
             = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 
     public static Response post(String url, RequestBody body) throws IOException {
-         Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
+        return post(url, null, body);
+    }
+
+    public static Response post(String url, ArrayList<Pair> headers, RequestBody body) throws IOException {
+        Request.Builder b = new Request.Builder();
+
+        if (headers != null) {
+            for (int i = 0; i < headers.size(); i++) {
+                Pair<String, String> h = headers.get(i);
+                b.addHeader(h.first, h.second);
+            }
+        }
+
+        Request request = b.url(url).post(body).build();
+
         Response response = HttpClientProvider.getInstance().newCall(request).execute();
         return response;
     }
