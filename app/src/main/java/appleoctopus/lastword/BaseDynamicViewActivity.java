@@ -22,6 +22,7 @@ import java.io.IOException;
 public class BaseDynamicViewActivity extends AppCompatActivity
         implements SurfaceHolder.Callback {
 
+    public static final String TAG ="BaseDynamicViewActivity";
     private SurfaceView mSurfaceView = null;
     private TextView mTextView = null;
     private Button mbutton = null;
@@ -114,17 +115,34 @@ public class BaseDynamicViewActivity extends AppCompatActivity
         //Get the dimensions of the video
         int videoWidth = mp.getVideoWidth();
         int videoHeight = mp.getVideoHeight();
-
         //Get the width of the screen
         int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
         int screenHeight = getWindowManager().getDefaultDisplay().getHeight();
 
         //Get the SurfaceView layout parameters
         android.view.ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
-        lp.width = screenWidth;
-        //Set the height of the SurfaceView to match the aspect ratio of the video
-        //be sure to cast these as floats otherwise the calculation will likely be 0
-        lp.height = screenHeight; //(int) (((float)videoHeight / (float)videoWidth) * (float)screenWidth);
+
+        boolean scaleVideoOnWidth = false;
+        // Inspect the raw video ratio and then set a flag indicating the video scale strategy base on raw ratio
+        if (videoWidth>= videoHeight) {
+            scaleVideoOnWidth = false;
+        } else {
+            scaleVideoOnWidth = true;
+        }
+        // Since the raw video is 1920x 1080 , therefore we respect the video ratio and scale video ratio
+
+        //lp.width = screenWidth;
+        if (scaleVideoOnWidth) {
+            lp.width = screenWidth;
+            //Set the height of the SurfaceView to match the aspect ratio of the video
+            //be sure to cast these as floats otherwise the calculation will likely be 0
+            lp.height = (int) (((float)videoHeight / (float)videoWidth) * (float)screenWidth);
+        } else {
+            //Set the height of the SurfaceView to match the aspect ratio of the video
+            //be sure to cast these as floats otherwise the calculation will likely be 0
+            lp.width = (int)(((float)screenHeight/(float)videoHeight) * (float) videoWidth);
+            lp.height = screenHeight;
+        }
 
         //Commit the layout parameters
         mSurfaceView.setLayoutParams(lp);
