@@ -5,20 +5,18 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_view"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_marginTop="15dp"
         android:layout_below="@+id/image_view"
-        android:layout_alignLeft="@+id/image_view"
-        android:layout_alignStart="@+id/image_view" />
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
