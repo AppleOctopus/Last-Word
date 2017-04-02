@@ -48,7 +48,7 @@ public class CategoryDetailRecyclerViewAdapter extends RecyclerView.Adapter<Cate
         Video v = mVideos.get(position);
         Bitmap b = ThumbnailUtils.createVideoThumbnail(
                 v.getLocalVideoPath(),
-                MediaStore.Video.Thumbnails.MICRO_KIND);
+                MediaStore.Video.Thumbnails.MINI_KIND);
         holder.mCircleImageView.setImageBitmap(b);
         holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -43,7 +43,7 @@ public class CategoryDetailActivity extends AppCompatActivity {
             finish();
         }
 
-        int numberInRow = 4;
+        int numberInRow = 2;
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberInRow));
         mAdapter = new CategoryDetailRecyclerViewAdapter(this);

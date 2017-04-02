@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import appleoctopus.lastword.models.Video;
+import appleoctopus.lastword.upload.UploadIntentService;
 
 public class VideoDetailActivity extends AppCompatActivity implements View.OnClickListener{
     public static String VIDEO_KEY = "VIDEO_KEY";
@@ -59,23 +60,30 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("label", mVideo.getLocalVideoUri());
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(this, "複製路徑：" + mVideo.getLocalVideoUri(), Toast.LENGTH_SHORT).show();
-
+                if (mVideo.getRemoteExist()) {
+                    Toast.makeText(this, "影片連結：" + mVideo.getRemoteVideoUri(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "上傳中，請稍候再試", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Intent.ACTION_SYNC, null, this, UploadIntentService.class);
+                    intent.putExtra("url", mVideo.getLocalVideoPath());
+                    intent.putExtra("video", new Gson().toJson(mVideo));
+                    startService(intent);
+                }
                 break;
 
             case R.id.imageButton_share:
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, mVideo.getLocalVideoUri());
-                sendIntent.setType("video/*");
-                startActivity(sendIntent);
-
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM,
+                        new Uri.Builder().path(mVideo.getLocalVideoUri()).build());
+                shareIntent.setType("video/*");
+                startActivity(Intent.createChooser(shareIntent, "請選擇"));
                 break;
 
             case R.id.imageView:
                 Uri uri = Uri.parse(mVideo.getLocalVideoUri());
-                Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(i);
+                Intent play = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(play);
                 break;
 
         }
