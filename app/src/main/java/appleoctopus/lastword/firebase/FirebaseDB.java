@@ -30,6 +30,7 @@ public class FirebaseDB {
 
     private FirebaseDB(){
         database = FirebaseDatabase.getInstance();
+        database.setPersistenceEnabled(true);
     }
 
     public static FirebaseDB getInstance(){
@@ -40,6 +41,7 @@ public class FirebaseDB {
                 }
             }
         }
+
         return instance;
     }
 
@@ -70,9 +72,9 @@ public class FirebaseDB {
         //auto fields population
         video.autoPopulateWheneverPossible();
 
-
         //Using this atomic update approach in case we will need to duplicate this key in different place of json tree
         video.setLastUpdateTime(Time.getCurrentTimeUTC());
+
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/" + VIDEO +"/" + userFbId + "/" + key, video);
 

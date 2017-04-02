@@ -116,9 +116,6 @@ public class CategoryDetailActivity extends AppCompatActivity {
                         CODE_FOR_WRITE_PERMISSION);
             }
         }
-
-
-
     }
 
     @Override

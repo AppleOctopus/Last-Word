@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +19,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import appleoctopus.lastword.R;
+import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.http.API;
+import appleoctopus.lastword.models.Video;
+import appleoctopus.lastword.util.SharePreference;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -31,8 +36,10 @@ public class UploadIntentService extends IntentService {
     public static final int STATUS_FINISHED = 1;
     public static final int STATUS_ERROR = 2;
 
-    private String token = "";
-    private String videoPath = "";
+    private Video mVideo;
+    private String mToken = "";
+    private String mVideoLocalPath = "";
+    private String mRemoteVideoId = "";
 
     public UploadIntentService() {
         super("uploadService");
@@ -50,10 +57,12 @@ public class UploadIntentService extends IntentService {
             receiver = new ResultReceiver(new Handler());
         }
 
-        videoPath = intent.getStringExtra("url");
+        String gson = intent.getStringExtra("video");
+        mVideo = (new Gson()).fromJson(gson, Video.class);
+        mVideoLocalPath = intent.getStringExtra("url");
 
         Bundle bundle = new Bundle();
-        if (!TextUtils.isEmpty(videoPath)) {
+        if (!TextUtils.isEmpty(mVideoLocalPath)) {
             /* Update UI: Download Service is Running */
             receiver.send(STATUS_RUNNING, Bundle.EMPTY);
 
@@ -62,6 +71,11 @@ public class UploadIntentService extends IntentService {
 
                 /* Sending result back to activity */
                 if (isSuccess) {
+                    mVideo.setRemoteExist(true);
+                    mVideo.setRemoteVideoUri("http://www.dailymotion.com/video/" + mRemoteVideoId);
+
+                    FirebaseDB.getInstance().saveNewVideo(mVideo, SharePreference.getFirebaseId(this));
+
                     bundle.putBoolean("result", isSuccess);
                     receiver.send(STATUS_FINISHED, bundle);
                 }
@@ -72,7 +86,6 @@ public class UploadIntentService extends IntentService {
                 receiver.send(STATUS_ERROR, bundle);
             }
         }
-
 
         Log.d(TAG, "Service Stopping!");
         this.stopSelf();
@@ -91,12 +104,12 @@ public class UploadIntentService extends IntentService {
             Response res = API.post("https://api.dailymotion.com/oauth/token", formBody);
             String jsonData = res.body().string();
             JSONObject jsonObject = new JSONObject(jsonData);
-            token = jsonObject.getString("access_token");
+            mToken = jsonObject.getString("access_token");
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
-        return token;
+        return mToken;
     }
 
     private String getUploadUrl(){
@@ -133,17 +146,17 @@ public class UploadIntentService extends IntentService {
             JSONObject jsonObject = new JSONObject(jsonData);
             secondUrl = jsonObject.getString("url");
         } catch (IOException | JSONException e) {
-        e.printStackTrace();
-    }
+          e.printStackTrace();
+        }
 
         return secondUrl;
     }
 
     private boolean createVideo() {
-        String url = getSecondUrl(videoPath);
+        String url = getSecondUrl(mVideoLocalPath);
 
         ArrayList<Pair> headers = new ArrayList<>();
-        Pair header = new Pair("Authorization", "Bearer " + token);
+        Pair header = new Pair("Authorization", "Bearer " + mToken);
         headers.add(header);
 
         RequestBody formBody = new FormBody.Builder()
@@ -151,12 +164,14 @@ public class UploadIntentService extends IntentService {
                 .build();
         boolean isSuccess = false;
          try {
-            Response res = API.post("https://api.dailymotion.com/me/videos", headers, formBody);
+             Response res = API.post("https://api.dailymotion.com/me/videos", headers, formBody);
              isSuccess = res.code() == 200;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+             String jsonData = res.body().string();
+             JSONObject jsonObject = new JSONObject(jsonData);
+             mRemoteVideoId = jsonObject.getString("id");
+         } catch (IOException | JSONException e) {
+             e.printStackTrace();
+         }
         return isSuccess;
     }
 }
