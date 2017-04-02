@@ -25,7 +25,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".Introduction.LoginActivity"
+            android:name=".LoginActivity"
             android:label="Last Word"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -34,15 +34,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:replace="android:theme" />
-
-        <activity android:name=".Introduction.IntroActivity"></activity>
+        <activity android:name=".Introduction.IntroActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -52,9 +50,13 @@
         <activity android:name=".Introduction.BeforeSelfRecordActivity" />
         <activity android:name=".BaseDynamicViewActivity" />
         <activity android:name=".CatogoryActivity" />
-         <activity android:name=".AfterSelfRecordActivity" />
+        <activity android:name=".AfterSelfRecordActivity" />
+        <activity android:name=".VideoDetailActivity" />
 
-        <activity android:name=".VideoDetailActivity"></activity>
+        <service
+            android:name=".upload.UploadIntentService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

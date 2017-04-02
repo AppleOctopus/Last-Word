@@ -1,4 +1,4 @@
-package appleoctopus.lastword.Introduction;
+package appleoctopus.lastword;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,10 +28,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 
-import appleoctopus.lastword.AfterSelfRecordActivity;
-import appleoctopus.lastword.R;
+import appleoctopus.lastword.Introduction.IntroActivity;
 import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.models.User;
+import appleoctopus.lastword.upload.UploadIntentService;
 import appleoctopus.lastword.util.SharePreference;
 
 /**
@@ -55,6 +55,18 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        /* Starting Download Service */
+        //UploadResultReceiver mReceiver = new UploadResultReceiver(new Handler());
+        //mReceiver.setReceiver(this);
+        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, UploadIntentService.class);
+
+        /* Send optional extras to Download IntentService */
+        intent.putExtra("url", "/storage/emulated/0/DCIM/Camera/VID_20170402_172257.mp4");
+        //intent.putExtra("receiver", mReceiver);
+        intent.putExtra("requestId", 101);
+
+        startService(intent);
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();

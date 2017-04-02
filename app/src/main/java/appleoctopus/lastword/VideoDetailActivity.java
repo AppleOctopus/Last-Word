@@ -67,7 +67,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, mVideo.getLocalVideoUri());
-                sendIntent.setType("text/plain");
+                sendIntent.setType("video/*");
                 startActivity(sendIntent);
 
                 break;
