@@ -63,76 +63,70 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in , proactily update user information everytime user signed_in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getDisplayName());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getProviderId());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.isEmailVerified());
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getToken(false).getResult().getToken());
-
-                    // If the above were null, iterate the provider data
-                    // and set with the first non null data
-
-                    //Just leave here for backup and monitor whether disaplay name and photourl will be different from directly getting from user object
-                    for (UserInfo userInfo : user.getProviderData()) {
-                        if (userInfo.getDisplayName() != null) {
-                            Log.d(TAG, "onAuthStateChanged:signed_in: userInfo.getDisplayName()" + userInfo.getDisplayName());
-                        }
-                        if (userInfo.getPhotoUrl() != null) {
-                            Log.d(TAG, "onAuthStateChanged:signed_in: userInfo.getPhotoUrl()" + userInfo.getPhotoUrl());
-                        }
-                    }
-
-                    if(!user.isEmailVerified()) {
-
-                        user.sendEmailVerification()
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d(TAG, "Verification Email sent.");
-                                        }
-                                    }
-                                });
-                    }
-
-                    // keep to local storage
-                    SharePreference.setFirebaseId(LoginActivity.this, user.getUid());
-
-                    // Write a message to the database
-                    User u = new User();
-                    u.setFbId(user.getUid());
-                    u.setDisplayName(user.getDisplayName());
-                    u.setFbEmail(user.getEmail());
-                    u.setFbPhotoUrl(user.getPhotoUrl().toString());
-                    u.setEmailVerified(user.isEmailVerified());
-
-                    //user.getProviderData();
-                    u.fetchVideoList();
-
-                    FirebaseDB.getInstance().saveNewUser(u);
-
-                    Intent intent = null;
-                    if (SharePreference.getIsFirstOpen(LoginActivity.this)) {
-                        intent = new Intent(getApplicationContext(), IntroActivity.class);
-                        intent.putExtra("uid",user.getUid());
-                        intent.putExtra("displayName",user.getDisplayName());
-                        intent.putExtra("email",user.getEmail());
-                        SharePreference.setIsFirstOpen(LoginActivity.this, false);
-                    } else {
-                        intent = new Intent(getApplicationContext(), AfterSelfRecordActivity.class);
-                    }
-                    startActivity(intent);
-
-
-                } else {
-                    // User is signed out
+                if (user == null) {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    return;
                 }
+
+                // User is signed in , proactily update user information everytime user signed_in
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getDisplayName());
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getProviderId());
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.isEmailVerified());
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getToken(false).getResult().getToken());
+
+                // If the above were null, iterate the provider data
+                // and set with the first non null data
+
+                //Just leave here for backup and monitor whether disaplay name and photourl will be different from directly getting from user object
+                for (UserInfo userInfo : user.getProviderData()) {
+                    if (userInfo.getDisplayName() != null) {
+                        Log.d(TAG, "onAuthStateChanged:signed_in: userInfo.getDisplayName()" + userInfo.getDisplayName());
+                    }
+                    if (userInfo.getPhotoUrl() != null) {
+                        Log.d(TAG, "onAuthStateChanged:signed_in: userInfo.getPhotoUrl()" + userInfo.getPhotoUrl());
+                    }
+                }
+
+                if(!user.isEmailVerified()) {
+                    user.sendEmailVerification()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {if (task.isSuccessful()) {
+                                            Log.d(TAG, "Verification Email sent.");
+                                    }}
+                                });
+                }
+
+                // keep to local storage
+                SharePreference.setFirebaseId(LoginActivity.this, user.getUid());
+
+                // Write a message to the database
+                User u = new User();
+                u.setFbId(user.getUid());
+                u.setDisplayName(user.getDisplayName());
+                u.setFbEmail(user.getEmail());
+                u.setFbPhotoUrl(user.getPhotoUrl().toString());
+                u.setEmailVerified(user.isEmailVerified());
+                u.fetchVideoList();
+
+                FirebaseDB.getInstance().saveNewUser(u);
+
+                Intent intent = null;
+                if (SharePreference.getIsFirstOpen(LoginActivity.this)) {
+                    intent = new Intent(getApplicationContext(), IntroActivity.class);
+                    intent.putExtra("uid",user.getUid());
+                    intent.putExtra("displayName",user.getDisplayName());
+                    intent.putExtra("email",user.getEmail());
+                    SharePreference.setIsFirstOpen(LoginActivity.this, false);
+                } else {
+                    intent = new Intent(getApplicationContext(), AfterSelfRecordActivity.class);
+                }
+                startActivity(intent);
+
             }
         };
         // ...
@@ -161,7 +155,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
