@@ -58,10 +58,11 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
             case R.id.imageButton_copy:
 
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", mVideo.getLocalVideoUri());
+                ClipData clip = ClipData.newPlainText("label", mVideo.getRemoteVideoUri());
                 clipboard.setPrimaryClip(clip);
+
                 if (mVideo.getRemoteExist()) {
-                    Toast.makeText(this, "影片連結：" + mVideo.getRemoteVideoUri(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "已複製連結：" + mVideo.getRemoteVideoUri(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "上傳中，請稍候再試", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Intent.ACTION_SYNC, null, this, UploadIntentService.class);
@@ -72,10 +73,10 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.imageButton_share:
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_STREAM,
-                        new Uri.Builder().path(mVideo.getLocalVideoUri()).build());
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                Uri videoUri = Uri.parse(mVideo.getLocalVideoUri());
+                shareIntent.putExtra(Intent.EXTRA_STREAM, videoUri);
                 shareIntent.setType("video/*");
                 startActivity(Intent.createChooser(shareIntent, "請選擇"));
                 break;

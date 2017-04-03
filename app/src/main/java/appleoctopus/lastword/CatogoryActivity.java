@@ -19,7 +19,6 @@ public class CatogoryActivity extends AppCompatActivity {
     static final int CAMERA_REQUEST = 1;
     static final String CATEGORY = "CATEGORY";
 
-
     RecyclerView recyclerView;
 
     @Override
