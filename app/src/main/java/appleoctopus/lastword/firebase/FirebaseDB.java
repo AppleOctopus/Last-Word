@@ -66,7 +66,7 @@ public class FirebaseDB {
         getReference().child(USER).child(user.getFbId()).updateChildren(userMap);
     }
 
-    public void saveNewVideo(Video video, String userFbId){
+    public String saveNewVideo(Video video, String userFbId){
         String key = getReference().child(VIDEO).child(userFbId).push().getKey();
 
         //auto fields population
@@ -81,6 +81,7 @@ public class FirebaseDB {
         //When the childUpdates map has been well prepared, update both places as an atomic operation
         getReference().updateChildren(childUpdates);
 
+        return key;
     }
 
     public void updateVideo(Video video, String userFbId){

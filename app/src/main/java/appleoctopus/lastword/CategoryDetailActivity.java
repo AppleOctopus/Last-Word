@@ -52,8 +52,13 @@ public class CategoryDetailActivity extends AppCompatActivity {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                // Get video key and put it as a reference in video object
+                String videoKey = dataSnapshot.getKey();
+
                 Video v = dataSnapshot.getValue(Video.class);
                 if (v != null) {
+                    // Get video key and put it as a reference in video object
+                    v.setVideoKey(videoKey);
                      if (v.getCategory() == catogory) {
                         videos.add(v);
                     }

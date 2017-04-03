@@ -71,6 +71,7 @@ public class UploadIntentService extends IntentService {
 
                 /* Sending result back to activity */
                 if (isSuccess) {
+                    Log.d(TAG,"isSuccess="+isSuccess);
                     mVideo.setRemoteExist(true);
                     mVideo.setRemoteVideoUri("http://www.dailymotion.com/video/" + mRemoteVideoId);
 
@@ -85,9 +86,10 @@ public class UploadIntentService extends IntentService {
                 /* Sending error message back to activity */
                 bundle.putString(Intent.EXTRA_TEXT, e.toString());
                 receiver.send(STATUS_ERROR, bundle);
+                Log.d(TAG,"Exception Happened "+e);
+
             }
         }
-
         Log.d(TAG, "Service Stopping!");
         this.stopSelf();
     }
@@ -104,6 +106,7 @@ public class UploadIntentService extends IntentService {
          try {
             Response res = API.post("https://api.dailymotion.com/oauth/token", formBody);
             String jsonData = res.body().string();
+             Log.d(TAG,"jsonData="+jsonData);
             JSONObject jsonObject = new JSONObject(jsonData);
             mToken = jsonObject.getString("access_token");
         } catch (IOException | JSONException e) {

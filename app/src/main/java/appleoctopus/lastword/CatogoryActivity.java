@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -16,6 +17,7 @@ import appleoctopus.lastword.util.SharePreference;
 import appleoctopus.lastword.util.Util;
 
 public class CatogoryActivity extends AppCompatActivity {
+    public static final String TAG = CatogoryActivity.class.getSimpleName();
     static final int CAMERA_REQUEST = 1;
     static final String CATEGORY = "CATEGORY";
 
@@ -43,13 +45,19 @@ public class CatogoryActivity extends AppCompatActivity {
             v.setCategory(requestCode);
             v.setLocalVideoPath(path);
 
+            Log.d(TAG, "Sync Call to firebase");
+            //Synchronous Call
+            String videoKey = FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
+            Log.d(TAG, "Sync Call to firebase : videoKey="+videoKey);
+
+            //settting video key into video object
+            v.setVideoKey(videoKey);
+
+            Log.d(TAG, "ASync Call to UploadIntentService");
             Intent intent = new Intent(Intent.ACTION_SYNC, null, this, UploadIntentService.class);
             intent.putExtra("url", path);
             intent.putExtra("video", new Gson().toJson(v));
             startService(intent);
-
-
-            FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
         }
     }
 }
