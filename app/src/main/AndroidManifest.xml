@@ -41,7 +41,7 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:replace="android:theme" />
-        <activity android:name=".AfterSelfRecordActivity"/>
+        <activity android:name=".AfterSelfRecordActivity" />
         <activity android:name=".CategoryDetailActivity" />
         <activity android:name=".Introduction.IntroActivity" />
         <activity android:name=".Introduction.BeforeSelfRecordActivity" />
@@ -49,8 +49,11 @@
         <activity android:name=".CatogoryActivity" />
         <activity android:name=".VideoDetailActivity" />
 
-        <service android:name=".upload.UploadIntentService"
-             android:exported="false" />
+        <service
+            android:name=".upload.UploadIntentService"
+            android:exported="false" />
+
+        <activity android:name=".StoryActivity"></activity>
     </application>
 
 </manifest>
