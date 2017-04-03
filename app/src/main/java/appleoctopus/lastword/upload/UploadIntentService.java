@@ -74,7 +74,8 @@ public class UploadIntentService extends IntentService {
                     mVideo.setRemoteExist(true);
                     mVideo.setRemoteVideoUri("http://www.dailymotion.com/video/" + mRemoteVideoId);
 
-                    FirebaseDB.getInstance().saveNewVideo(mVideo, SharePreference.getFirebaseId(this));
+                    //FirebaseDB.getInstance().saveNewVideo(mVideo, SharePreference.getFirebaseId(this));
+                    FirebaseDB.getInstance().updateVideo(mVideo, SharePreference.getFirebaseId(this));
 
                     bundle.putBoolean("result", isSuccess);
                     receiver.send(STATUS_FINISHED, bundle);
