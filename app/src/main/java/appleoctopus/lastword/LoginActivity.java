@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent = new Intent(getApplicationContext(), AfterSelfRecordActivity.class);
                 }
                 startActivity(intent);
-
+                finish();
             }
         };
         // ...
