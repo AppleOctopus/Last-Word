@@ -6,7 +6,7 @@ description: Record the last word to let everyone leave something.
 
 The following **required** functionality is completed:
 
-* T [*] User can sign in with ***Facebook*** and Google+ 
+* T [*] User can sign in with ***Facebook*** or Google+ 
    * T [*] Request Permission of Friend List, Public Profile, Email
 * A [*] Implement different scenes with dynamic background
 * A [*] User can use the front camera try to record the video
@@ -22,6 +22,7 @@ The following **required** functionality is completed:
 * [*] User can copy the link in the video playing page.
 
 The following **bonus** features are implemented:
+* [*] Polish the user login screen and customize facebook login button
 * [] User can play their video on Dailymotion if there is no file on device
 * [] User can set the password to protect their videos.
 * [] Change the VideoView to ExoPlayer 

@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -47,6 +49,9 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    //Custom Image
+    private ImageView ivFbCustomButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +136,10 @@ public class LoginActivity extends AppCompatActivity {
         // ...
 
         callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
+        final LoginButton loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
+        loginButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        loginButton.setCompoundDrawablePadding(0);
+        loginButton.setText("");
         loginButton.setReadPermissions("email", "public_profile", "user_friends");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -150,6 +158,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onError(FacebookException error) {
                 Log.d("DEBUG", "facebook:onError", error);
                 // ...
+            }
+        });
+        loginButton.setVisibility(View.GONE);
+
+        ivFbCustomButton = (ImageView)  findViewById(R.id.iv_fb_custom_button);
+        ivFbCustomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginButton.performClick();
             }
         });
 
