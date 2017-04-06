@@ -13,10 +13,10 @@ import appleoctopus.lastword.util.Time;
 
 @IgnoreExtraProperties
 public class Video {
-    public static int CATOGORY_THX = 1;
-    public static int CATOGORY_SORRY = 2;
-    public static int CATOGORY_MISS = 3;
-    public static int CATOGORY_LIFE = 4;
+    public static int CATOGORY_THX = 0;
+    public static int CATOGORY_SORRY = 1;
+    public static int CATOGORY_MISS = 2;
+    public static int CATOGORY_LIFE = 3;
 
     @Exclude
     private final static String TAG = "Video";

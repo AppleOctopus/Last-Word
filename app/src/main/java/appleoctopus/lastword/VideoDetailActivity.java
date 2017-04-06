@@ -62,7 +62,7 @@ public class VideoDetailActivity extends AppCompatActivity implements View.OnCli
                 clipboard.setPrimaryClip(clip);
 
                 if (mVideo.getRemoteExist()) {
-                    Toast.makeText(this, "已複製連結：" + mVideo.getRemoteVideoUri(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "已上傳備份", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "上傳中，請稍候再試", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Intent.ACTION_SYNC, null, this, UploadIntentService.class);

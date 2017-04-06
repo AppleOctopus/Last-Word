@@ -97,12 +97,12 @@
 
 
             <appleoctopus.lastword.images.CircularImageView
-                android:layout_width="111dp"
-                android:layout_height="111dp"
-                android:src="@drawable/ic_facebook"
                 android:id="@+id/iv_fb_custom_button"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:layout_gravity="bottom|center"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/ic_facebook" />
 
             <Space
                 android:layout_width="match_parent"

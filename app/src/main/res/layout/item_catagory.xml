@@ -21,12 +21,12 @@
 
     <Button
         android:id="@+id/button_record"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="27dp"
-        android:background="@android:drawable/ic_menu_camera" />
+        android:layout_marginTop="15dp"
+        android:background="@drawable/camera01" />
 
 
 </RelativeLayout>
