@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Set;
+
 /**
  * Created by allenwang on 2017/3/23.
  */
@@ -23,11 +25,17 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
     private String[] mTitles;
     private TypedArray mBgIds;
 
+    private Set<Integer> mIntSet;
+
+
     public CatogoryRecyclerViewAdapter(Context context) {
         mTitles = context.getResources().getStringArray(R.array.titles);
         mBgIds = context.getResources().obtainTypedArray(R.array.bg_ids);
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
+    }
+    public void updateData(Set<Integer> intSet){
+        this.mIntSet = intSet;
     }
 
     @Override
@@ -42,9 +50,15 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
         holder.mBgImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isVideoExist = mIntSet.contains(position);
                 Intent i = new Intent();
-                i.setClass(mContext, CategoryDetailActivity.class);
-                i.putExtra(CategoryDetailActivity.CATEGORY_KEY, position);
+                if (isVideoExist) {
+                    i.setClass(mContext, CategoryDetailActivity.class);
+                    i.putExtra(CategoryDetailActivity.CATEGORY_KEY, position);
+                } else {
+                    i.setClass(mContext, StoryActivity.class);
+                    i.putExtra(CategoryDetailActivity.CATEGORY_KEY, position);
+                }
                 mContext.startActivity(i);
             }
         });

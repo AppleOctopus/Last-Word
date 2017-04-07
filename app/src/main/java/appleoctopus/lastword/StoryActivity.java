@@ -31,7 +31,7 @@ public class StoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story);
 
-        catogory = getIntent().getIntExtra("category", -1);
+        catogory = getIntent().getIntExtra(CategoryDetailActivity.CATEGORY_KEY, -1);
 
         imageButton = (ImageButton) findViewById(R.id.imageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +63,8 @@ public class StoryActivity extends AppCompatActivity {
 
 
             FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
+
+            finish();
         }
     }
 }
