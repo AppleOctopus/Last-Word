@@ -29,7 +29,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 
-import appleoctopus.lastword.Introduction.IntroActivity;
 import appleoctopus.lastword.firebase.FirebaseDB;
 import appleoctopus.lastword.models.User;
 import appleoctopus.lastword.util.SharePreference;
@@ -118,7 +117,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 Intent intent = null;
                 if (SharePreference.getIsFirstOpen(LoginActivity.this)) {
-                    intent = new Intent(getApplicationContext(), IntroActivity.class);
+                    //intent = new Intent(getApplicationContext(), IntroActivity.class);
+                    intent = new Intent(getApplicationContext(), FirstOpenDynamicViewActivity.class);
                     intent.putExtra("uid",user.getUid());
                     intent.putExtra("displayName",user.getDisplayName());
                     intent.putExtra("email",user.getEmail());

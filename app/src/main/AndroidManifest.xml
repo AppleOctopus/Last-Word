@@ -6,7 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -46,6 +48,7 @@
         <activity android:name=".Introduction.IntroActivity" />
         <activity android:name=".Introduction.BeforeSelfRecordActivity" />
         <activity android:name=".BaseDynamicViewActivity" />
+        <activity android:name=".FirstOpenDynamicViewActivity" />
         <activity android:name=".CatogoryActivity" />
         <activity android:name=".VideoDetailActivity" />
 
