@@ -23,6 +23,7 @@ The following **required** functionality is completed:
 
 The following **bonus** features are implemented:
 * [*] Polish the user login screen and customize facebook login button
+* [*] Polish the feeling of first open activity
 * [] User can play their video on Dailymotion if there is no file on device
 * [] User can set the password to protect their videos.
 * [] Change the VideoView to ExoPlayer 
