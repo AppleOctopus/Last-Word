@@ -30,6 +30,28 @@ public class CatogoryActivity extends AppCompatActivity {
     static final int CAMERA_REQUEST = 1;
     static final String CATEGORY = "CATEGORY";
 
+    private ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists()) {
+                for (DataSnapshot video : dataSnapshot.getChildren()) {
+                    Video v = video.getValue(Video.class);
+                    if (v != null) {
+                        int i = v.getCategory();
+                        intSet.add(i);
+                    }
+                }
+                adapter.updateData(intSet);
+                adapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
     RecyclerView recyclerView;
     CatogoryRecyclerViewAdapter adapter;
     Set<Integer> intSet = new HashSet<Integer>();
@@ -46,39 +68,23 @@ public class CatogoryActivity extends AppCompatActivity {
         final ArrayList arrayList = new ArrayList();
         intSet = new HashSet<Integer>();
 
-        FirebaseDB.getInstance()
-                .getReference(VIDEO)
-                .child(SharePreference.getFirebaseId(this))
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot video : dataSnapshot.getChildren()) {
-                        Video v = video.getValue(Video.class);
-                        if (v != null) {
-//                            arrayList.add(v);
-                            int i = v.getCategory();
-                            intSet.add(i);
-                        }
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        adapter.updateData(intSet);
+//        FirebaseDB.getInstance()
+//                .getReference(VIDEO)
+//                .child(SharePreference.getFirebaseId(this))
+//                .addListenerForSingleValueEvent(valueEventListener);
+//
+//        adapter.updateData(intSet);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.updateData(intSet);
-        adapter.notifyDataSetChanged();
+        FirebaseDB.getInstance()
+                .getReference(VIDEO)
+                .child(SharePreference.getFirebaseId(this))
+                .addListenerForSingleValueEvent(valueEventListener);
+
+
     }
 
     @Override
@@ -108,4 +114,6 @@ public class CatogoryActivity extends AppCompatActivity {
             startService(intent);
         }
     }
+
+
 }

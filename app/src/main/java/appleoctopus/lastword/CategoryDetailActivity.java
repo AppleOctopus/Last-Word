@@ -6,13 +6,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -63,6 +61,7 @@ public class CategoryDetailActivity extends AppCompatActivity {
                         videos.add(v);
                     }
                     mAdapter.updateData(videos);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -90,22 +89,22 @@ public class CategoryDetailActivity extends AppCompatActivity {
             }
         };
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                  Video v = dataSnapshot.getValue(Video.class);
-                  if (v != null) {
-                      v.getLocalVideoUri();
-                  }
-             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
+//        ValueEventListener valueEventListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                  Video v = dataSnapshot.getValue(Video.class);
+//                  if (v != null) {
+//                      v.getLocalVideoUri();
+//                  }
+//             }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Getting Post failed, log a message
+//                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+//                // ...
+//            }
+//        };
 
         FirebaseDB.getInstance()
                 .getReference(VIDEO)
@@ -128,12 +127,10 @@ public class CategoryDetailActivity extends AppCompatActivity {
         if (requestCode == CODE_FOR_WRITE_PERMISSION){
             if (permissions[0].equals(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     &&grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
+                mAdapter.notifyDataSetChanged();
             }else{
-                //用户不同意，自行处理即可
-                ActivityCompat.requestPermissions(CategoryDetailActivity.this,
-                        new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        CODE_FOR_WRITE_PERMISSION);            }
+                finish();
+            }
         }
     }
 }

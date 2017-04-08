@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -25,7 +26,7 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
     private String[] mTitles;
     private TypedArray mBgIds;
 
-    private Set<Integer> mIntSet;
+    private Set<Integer> mIntSet = new HashSet<Integer>();
 
 
     public CatogoryRecyclerViewAdapter(Context context) {
@@ -35,7 +36,8 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
         mLayoutInflater = LayoutInflater.from(context);
     }
     public void updateData(Set<Integer> intSet){
-        this.mIntSet = intSet;
+        this.mIntSet.clear();
+        this.mIntSet.addAll(intSet);
     }
 
     @Override

@@ -56,13 +56,13 @@ public class StoryActivity extends AppCompatActivity {
             v.setCategory(requestCode);
             v.setLocalVideoPath(path);
 
+            String videoKey = FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
+            v.setVideoKey(videoKey);
+
             Intent intent = new Intent(Intent.ACTION_SYNC, null, this, UploadIntentService.class);
             intent.putExtra("url", path);
             intent.putExtra("video", new Gson().toJson(v));
             startService(intent);
-
-
-            FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
 
             finish();
         }
