@@ -67,7 +67,7 @@ public class CatogoryRecyclerViewAdapter extends RecyclerView.Adapter<CatogoryRe
             @Override
             public void onClick(View v) {
                 Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                //takeVideoIntent.putExtra(CATEGORY, position);
+                takeVideoIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
                 ((Activity)mContext).startActivityForResult(
                         takeVideoIntent, position);
              }
