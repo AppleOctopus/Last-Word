@@ -1,9 +1,14 @@
 package appleoctopus.lastword;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,17 +18,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
-import appleoctopus.lastword.Introduction.BeforeSelfRecordActivity;
+import appleoctopus.lastword.firebase.FirebaseDB;
+import appleoctopus.lastword.models.Video;
+import appleoctopus.lastword.upload.UploadIntentService;
+import appleoctopus.lastword.util.SharePreference;
+import appleoctopus.lastword.util.Util;
 
 /**
  * Created by allenwang on 2017/3/19.
  */
 
 public class FirstOpenDynamicViewActivity extends AppCompatActivity {
-
     public static final String TAG ="FirstOpenDynamic";
+    private static final int REQUEST_VIDEO_CAPTURE = 1;
+    static final int CODE_FOR_WRITE_PERMISSION = 1;
+
     private ImageView mImageView = null;
     private TextView mTextView1 = null;
     private TextView mTextView2 = null;
@@ -139,10 +152,7 @@ public class FirstOpenDynamicViewActivity extends AppCompatActivity {
                                         @Override
                                         public void onClick(View v) {
 
-                                            Intent i = new Intent();
-                                            i.setClass(FirstOpenDynamicViewActivity.this, BeforeSelfRecordActivity.class);
-                                            startActivity(i);
-                                            finish();
+                                            askUserPermission();
 
                                         }
                                     });
@@ -211,5 +221,69 @@ public class FirstOpenDynamicViewActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    private void askUserPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.CAMERA);
+            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[] {android.Manifest.permission.CAMERA},
+                        CODE_FOR_WRITE_PERMISSION);
+            }
+        } else {
+            dispatchTakeVideoIntent();
+        }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == CODE_FOR_WRITE_PERMISSION){
+            if (permissions[0].equals(android.Manifest.permission.CAMERA)
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                dispatchTakeVideoIntent();
+            }else{
+
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            Uri videoUri = intent.getData();
+            String path = Util.getPathFromUri(this, Uri.parse(videoUri.toString()));
+
+            Log.d(TAG, videoUri.toString());
+            Log.d(TAG, videoUri.getPath());
+
+            Video v = new Video();
+            v.setLocalVideoUri(videoUri.toString());
+            v.setLocalVideoPath(path);
+            v.setCategory(Video.CATOGORY_LIFE);
+
+            String videoKey = FirebaseDB.getInstance().saveNewVideo(v, SharePreference.getFirebaseId(this));
+            Log.d(TAG, "Sync Call to firebase : videoKey="+videoKey);
+
+            //settting video key into video object
+            v.setVideoKey(videoKey);
+
+            Intent sync = new Intent(Intent.ACTION_SYNC, null, this, UploadIntentService.class);
+            intent.putExtra("url", v.getLocalVideoPath());
+            intent.putExtra("video", new Gson().toJson(v));
+            startService(sync);
+
+            Intent redirect = new Intent();
+            redirect.setClass(this, AfterSelfRecordActivity.class);
+            startActivity(redirect);
+            finish();
+
+        }
+    }
+
+    private void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        takeVideoIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+        }
+    }
 }

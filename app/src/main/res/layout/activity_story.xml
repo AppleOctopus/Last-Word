@@ -22,7 +22,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="這麼可愛的你，\n如果能留下一點什麼，一定是最好的禮物"
+            android:text="說出口的遺憾，將使生命更加完整"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:layout_marginBottom="42dp"

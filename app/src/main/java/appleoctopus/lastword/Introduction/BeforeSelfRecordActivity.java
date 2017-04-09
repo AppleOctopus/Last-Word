@@ -1,9 +1,12 @@
 package appleoctopus.lastword.Introduction;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -20,17 +23,46 @@ import appleoctopus.lastword.util.Util;
 public class BeforeSelfRecordActivity extends BaseDynamicViewActivity {
     private static final String TAG = BeforeSelfRecordActivity.class.getSimpleName();
     private static final int REQUEST_VIDEO_CAPTURE = 1;
+    static final int CODE_FOR_WRITE_PERMISSION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dispatchTakeVideoIntent();
+        askUserPermission();
+        //dispatchTakeVideoIntent();
+
+        /** The word is default **/
         setButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dispatchTakeVideoIntent();
+                askUserPermission();
             }
         });
+    }
+
+    private void askUserPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.CAMERA);
+            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[] {android.Manifest.permission.CAMERA},
+                        CODE_FOR_WRITE_PERMISSION);
+            }
+        } else {
+            dispatchTakeVideoIntent();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == CODE_FOR_WRITE_PERMISSION){
+            if (permissions[0].equals(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    &&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                dispatchTakeVideoIntent();
+            }else{
+
+            }
+        }
     }
 
     @Override

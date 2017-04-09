@@ -122,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("uid",user.getUid());
                     intent.putExtra("displayName",user.getDisplayName());
                     intent.putExtra("email",user.getEmail());
-                    SharePreference.setIsFirstOpen(LoginActivity.this, false);
                 } else {
                     intent = new Intent(getApplicationContext(), AfterSelfRecordActivity.class);
                 }
@@ -153,8 +152,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
+                Toast.makeText(LoginActivity.this, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("DEBUG", "facebook:onError", error);
-                // ...
             }
         });
         loginButton.setVisibility(View.GONE);
