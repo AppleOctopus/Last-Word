@@ -2,4 +2,8 @@
     <string name="app_name">Lastword</string>
     <string name="action_logout"> Log Out</string>
     <string name="facebook_app_id">424884681183083</string>
+    <string name="dailymotion_account">demoKey</string>
+    <string name="dailymotion_pwd">demoPwd</string>
+    <string name="dailymotion_api_id">demoId</string>
+    <string name="dailymotion_api_secret">demoSecret</string>
 </resources>
