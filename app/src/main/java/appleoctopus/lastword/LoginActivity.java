@@ -38,14 +38,13 @@ import appleoctopus.lastword.util.SharePreference;
  */
 
 public class LoginActivity extends AppCompatActivity {
-    //firebase auth
     private static final String TAG = "facebooklogin";
+
+    //firebase auth
     private FirebaseAuth mAuth;
-    private ProgressBar progressBar;
 
     //FaceBook
     private CallbackManager callbackManager;
-    private LoginButton loginButton;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     //Custom Image
@@ -64,31 +63,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user == null) {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
                     return;
-                }
-
-                // User is signed in , proactily update user information everytime user signed_in
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getDisplayName());
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getEmail());
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getProviderId());
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getPhotoUrl());
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.isEmailVerified());
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getToken(false).getResult().getToken());
-
-                // If the above were null, iterate the provider data
-                // and set with the first non null data
-
-                //Just leave here for backup and monitor whether disaplay name and photourl will be different from directly getting from user object
-                for (UserInfo userInfo : user.getProviderData()) {
-                    if (userInfo.getDisplayName() != null) {
-                        Log.d(TAG, "onAuthStateChanged:signed_in: userInfo.getDisplayName()" + userInfo.getDisplayName());
-                    }
-                    if (userInfo.getPhotoUrl() != null) {
-                        Log.d(TAG, "onAuthStateChanged:signed_in: userInfo.getPhotoUrl()" + userInfo.getPhotoUrl());
-                    }
                 }
 
                 if(!user.isEmailVerified()) {
@@ -96,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {if (task.isSuccessful()) {
-                                            Log.d(TAG, "Verification Email sent.");
                                     }}
                                 });
                 }
@@ -140,20 +114,16 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d("DEBUG", "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                Log.d("DEBUG", "facebook:onCancel");
-                // ...
             }
 
             @Override
             public void onError(FacebookException error) {
                 Toast.makeText(LoginActivity.this, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("DEBUG", "facebook:onError", error);
             }
         });
         loginButton.setVisibility(View.GONE);
@@ -169,50 +139,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Your account has been disabled. Sorry!",
                                     Toast.LENGTH_LONG).show();
                             FirebaseAuth.getInstance().signOut();
                             SharePreference.setFirebaseId(LoginActivity.this, null);
                             LoginManager.getInstance().logOut();
                         }
-
-                        // ...
                     }
                 });
-
-        /**
-        mAuth.getCurrentUser().linkWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "linkWithCredential:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                    }
-                });*/
-
     }
 
     @Override
@@ -240,11 +183,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-
-        //email = (EditText) findViewById(R.id.edit_text_email_id);
-        //password = (EditText) findViewById(R.id.edit_text_password);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar_login);
-
     }
 
     @Override
@@ -261,6 +199,4 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-    //
-
 }

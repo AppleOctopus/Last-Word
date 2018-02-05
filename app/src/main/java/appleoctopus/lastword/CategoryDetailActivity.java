@@ -89,23 +89,6 @@ public class CategoryDetailActivity extends AppCompatActivity {
             }
         };
 
-//        ValueEventListener valueEventListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                  Video v = dataSnapshot.getValue(Video.class);
-//                  if (v != null) {
-//                      v.getLocalVideoUri();
-//                  }
-//             }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // Getting Post failed, log a message
-//                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-//                // ...
-//            }
-//        };
-
         FirebaseDB.getInstance()
                 .getReference(VIDEO)
                 .child(SharePreference.getFirebaseId(this))
